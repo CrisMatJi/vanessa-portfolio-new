@@ -6,7 +6,7 @@ import WhatsAppButton from '../components/WhatsAppButton.astro';
 // import ProjectCard from '../components/ProjectCard.astro';
 // import { projects } from '../data/projects';
 
-import heroImage from '../assets/images/projects/ajibe/foto-patio.jpeg';
+import heroImage from '../assets/images/hero-interior.png';
 import vanessaPortrait from '../assets/images/vanessa.jpeg';
 
 const jsonLd = {
@@ -67,7 +67,7 @@ const servicios = [
   <!-- Hero -->
   <section class="hero">
     <div class="hero-bg">
-      <Image src={heroImage} alt="Patio interior con luz natural, proyecto de interiorismo Suárez Studio" width={1800} height={1200} priority />
+      <Image src={heroImage} alt="Salón interior con luz cálida, interiorismo Suárez Studio" width={1800} height={1200} priority />
     </div>
     <div class="hero-scrim"></div>
     <div class="hero-content">
@@ -1032,7 +1032,7 @@ const servicios = [
   .form textarea {
     resize: vertical;
   }
-  .form-checkbox {
+  .form .form-checkbox {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
