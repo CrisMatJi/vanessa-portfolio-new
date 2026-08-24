@@ -71,6 +71,11 @@ const defaultOgImage = new URL('/og-image.jpg', Astro.site);
       };
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
+
+      // El QR del estudio enlaza a /?panel=contact para ir directo al formulario.
+      if (new URLSearchParams(window.location.search).get('panel') === 'contact') {
+        document.getElementById('contacto')?.scrollIntoView();
+      }
     </script>
   </body>
 </html>
