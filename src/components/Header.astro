@@ -1,23 +1,23 @@
 ---
 import { Image } from 'astro:assets';
-import logoWhite from '../assets/images/logo-suarez-white.png';
-import logoBlack from '../assets/images/logo-suarez-black.png';
+import iconWhite from '../assets/images/icon-white.png';
+import iconBlack from '../assets/images/icon-black.png';
 ---
 
 <header data-site-header class="header">
   <a href="#top" aria-label="Suárez Studio — inicio" class="logo">
     <Image
-      src={logoWhite}
+      src={iconWhite}
       alt="Suárez Studio, interiorismo arquitectónico en Cádiz"
-      width={140}
-      height={45}
+      width={573}
+      height={952}
       class="logo-img logo-img-white"
     />
     <Image
-      src={logoBlack}
+      src={iconBlack}
       alt="Suárez Studio, interiorismo arquitectónico en Cádiz"
-      width={140}
-      height={45}
+      width={573}
+      height={952}
       class="logo-img logo-img-black"
     />
   </a>
@@ -62,14 +62,16 @@ import logoBlack from '../assets/images/logo-suarez-black.png';
   .logo {
     position: relative;
     display: block;
-    width: 88px;
+    width: 24px;
+    height: 40px;
     flex: none;
   }
 
   .logo-img {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: contain;
     transition: opacity 0.35s ease;
   }
 

@@ -92,7 +92,10 @@ const servicios = [
 
   <!-- Marquee band -->
   <section class="band">
-    <div class="band-text">Casas que se parecen a quien vive en ellas</div>
+    <div class="band-track">
+      <span class="band-text">Casas que se parecen a quien vive en ellas</span>
+      <span class="band-text" aria-hidden="true">Casas que se parecen a quien vive en ellas</span>
+    </div>
     <div class="band-grid">
       <div data-reveal class="band-item">
         <p class="band-title">Vivienda particular</p>
@@ -573,14 +576,34 @@ const servicios = [
     padding: clamp(56px, 9vh, 110px) 0 clamp(46px, 7vh, 86px);
     overflow: hidden;
   }
-  .band-text {
+  .band-track {
+    display: inline-flex;
     white-space: nowrap;
+    animation: band-marquee 26s linear infinite;
+    will-change: transform;
+  }
+
+  .band-text {
     font-size: clamp(2.6rem, 9.4vw, 11rem);
     line-height: 1;
     letter-spacing: -0.04em;
     font-weight: 800;
     padding-left: clamp(20px, 4vw, 56px);
-    will-change: transform;
+  }
+
+  @keyframes band-marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .band-track {
+      animation: none;
+    }
   }
   .band-grid {
     display: grid;

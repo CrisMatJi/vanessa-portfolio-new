@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import logo from '../assets/images/logo-suarez-black.png';
+import icon from '../assets/images/icon-black.png';
 
 const year = new Date().getFullYear();
 ---
@@ -8,7 +8,7 @@ const year = new Date().getFullYear();
 <footer class="footer">
   <div class="grid">
     <div class="brand">
-      <Image src={logo} alt="Suárez Studio" width={150} height={48} class="brand-logo" />
+      <Image src={icon} alt="Suárez Studio" width={573} height={952} class="brand-logo" />
       <p>Interiorismo arquitectónico en Cádiz. Proyecto, renders, planimetría y seguimiento de obra.</p>
     </div>
     <div class="col">
@@ -63,8 +63,8 @@ const year = new Date().getFullYear();
   }
 
   .brand-logo {
-    width: 110px;
-    height: auto;
+    width: auto;
+    height: 44px;
     margin-bottom: 14px;
   }
 
