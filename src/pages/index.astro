@@ -968,9 +968,12 @@ const servicios = [
     color: #fff;
   }
   .form {
-    display: flex;
     flex-direction: column;
     gap: 16px;
+  }
+
+  .form:not([hidden]) {
+    display: flex;
   }
   .form-sent {
     flex-direction: column;
