@@ -61,12 +61,21 @@ const defaultOgImage = new URL('/og-image.jpg', Astro.site);
 
       const bar = document.getElementById('scroll-bar');
       const header = document.querySelector('header[data-site-header]') as HTMLElement | null;
+      const banda = document.querySelector('.band') as HTMLElement | null;
+      const bandaTexto = document.querySelector('.band-text') as HTMLElement | null;
       const onScroll = () => {
         const y = Math.max(0, window.scrollY);
         const max = document.body.scrollHeight - window.innerHeight;
         if (bar) bar.style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
         const solid = y > window.innerHeight * 0.7;
         header?.classList.toggle('is-solid', solid);
+
+        if (banda && bandaTexto) {
+          const r = banda.getBoundingClientRect();
+          const p = r.height > 0 ? -r.top / r.height : 0;
+          const desb = Math.max(0, bandaTexto.scrollWidth - banda.clientWidth + 80);
+          bandaTexto.style.transform = `translateX(${(-Math.max(0, Math.min(1, p)) * desb).toFixed(1)}px)`;
+        }
       };
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();

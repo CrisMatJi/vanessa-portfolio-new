@@ -2,8 +2,9 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import WhatsAppButton from '../components/WhatsAppButton.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import { projects } from '../data/projects';
+// ProjectCard/projects: solo se usan en la sección "Proyectos", desactivada por ahora (ver más abajo).
+// import ProjectCard from '../components/ProjectCard.astro';
+// import { projects } from '../data/projects';
 
 import heroImage from '../assets/images/projects/ajibe/foto-patio.jpeg';
 import vanessaPortrait from '../assets/images/vanessa.jpeg';
@@ -84,7 +85,7 @@ const servicios = [
         <p data-reveal class="eyebrow hero-eyebrow">Interiorismo arquitectónico · Cádiz</p>
       </div>
       <h1 class="hero-title">
-        <span class="reveal-line"><span>Suárez Studio<span class="reg">®</span></span></span>
+        <span class="reveal-line"><span data-reveal>Suárez Studio<span class="reg">®</span></span></span>
       </h1>
     </div>
   </section>
@@ -116,8 +117,8 @@ const servicios = [
   <section id="servicios" class="section">
     <div class="section-head">
       <h2 class="h-xl">
-        <span class="reveal-line"><span>En qué puedo</span></span>
-        <span class="reveal-line"><span class="dim">ayudarte</span></span>
+        <span class="reveal-line"><span data-reveal>En qué puedo</span></span>
+        <span class="reveal-line"><span data-reveal class="dim">ayudarte</span></span>
       </h2>
       <p class="eyebrow">01 — Servicios</p>
     </div>
@@ -136,26 +137,32 @@ const servicios = [
     </div>
   </section>
 
-  <!-- Proyectos -->
-  <section id="proyectos" class="section proyectos">
-    <div class="section-head">
-      <h2 class="h-xl">
-        <span class="reveal-line"><span>Proyectos</span></span>
-        <span class="reveal-line"><span class="dim">realizados</span></span>
-      </h2>
-      <p class="eyebrow">02 — Proyectos</p>
-    </div>
-    <div class="proyectos-grid">
-      {projects.map((project, i) => <ProjectCard project={project} index={i} />)}
-    </div>
-  </section>
+  {
+    /*
+    Proyectos — oculto a petición del cliente hasta decidir qué hacer con la
+    galería de CEA/Ajibe. El bloque se deja listo para reactivar.
+
+    <section id="proyectos" class="section proyectos">
+      <div class="section-head">
+        <h2 class="h-xl">
+          <span class="reveal-line"><span data-reveal>Proyectos</span></span>
+          <span class="reveal-line"><span data-reveal class="dim">realizados</span></span>
+        </h2>
+        <p class="eyebrow">02 — Proyectos</p>
+      </div>
+      <div class="proyectos-grid">
+        {projects.map((project, i) => <ProjectCard project={project} index={i} />)}
+      </div>
+    </section>
+    */
+  }
 
   <!-- Proceso -->
   <section id="proceso" class="proceso">
     <div class="section-head dark">
       <h2 class="h-xl">
-        <span class="reveal-line"><span>Cuatro fases,</span></span>
-        <span class="reveal-line"><span class="dim-light">cero sorpresas</span></span>
+        <span class="reveal-line"><span data-reveal>Cuatro fases,</span></span>
+        <span class="reveal-line"><span data-reveal class="dim-light">cero sorpresas</span></span>
       </h2>
       <p class="proceso-lede">
         Casi todos los sustos de una reforma vienen de decisiones que se toman tarde. Este orden existe justamente
@@ -239,8 +246,8 @@ const servicios = [
       <div class="estudio-copy">
         <p class="eyebrow">03 — Sobre mí</p>
         <h2 class="h-lg">
-          <span class="reveal-line"><span>Trabajo</span></span>
-          <span class="reveal-line"><span class="dim">de una en una</span></span>
+          <span class="reveal-line"><span data-reveal>Trabajo</span></span>
+          <span class="reveal-line"><span data-reveal class="dim">de una en una</span></span>
         </h2>
         <p class="body-copy">
           No llevo veinte proyectos a la vez, y por eso el teléfono lo cojo yo. Vengo del interiorismo
@@ -267,7 +274,7 @@ const servicios = [
       <div>
         <p class="eyebrow" style="margin-bottom:20px">04 — Dudas frecuentes</p>
         <h2 class="h-lg">
-          <span class="reveal-line"><span>Lo que todo el mundo me pregunta</span></span>
+          <span class="reveal-line"><span data-reveal>Lo que todo el mundo me pregunta</span></span>
         </h2>
       </div>
       <div class="faq-list">
@@ -307,8 +314,8 @@ const servicios = [
   <!-- Contacto -->
   <section id="contacto" class="contacto">
     <h2 class="h-xxl">
-      <span class="reveal-line"><span>Cuéntame qué casa</span></span>
-      <span class="reveal-line"><span class="dim-light">tienes entre manos</span></span>
+      <span class="reveal-line"><span data-reveal>Cuéntame qué casa</span></span>
+      <span class="reveal-line"><span data-reveal class="dim-light">tienes entre manos</span></span>
     </h2>
     <div class="contacto-grid">
       <div class="contacto-left">
@@ -381,7 +388,7 @@ const servicios = [
   <!-- Zonas -->
   <section id="zonas" class="section zonas">
     <h2 class="h-md">
-      <span class="reveal-line"><span>Dónde trabajo</span></span>
+      <span class="reveal-line"><span data-reveal>Dónde trabajo</span></span>
     </h2>
     <div class="zonas-grid">
       <div>
@@ -573,6 +580,7 @@ const servicios = [
     letter-spacing: -0.04em;
     font-weight: 800;
     padding-left: clamp(20px, 4vw, 56px);
+    will-change: transform;
   }
   .band-grid {
     display: grid;
@@ -636,8 +644,20 @@ const servicios = [
   /* Servicios */
   .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 18px;
+  }
+
+  @media (max-width: 900px) {
+    .services-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .services-grid {
+      grid-template-columns: 1fr;
+    }
   }
   .service-card {
     background: var(--panel);
