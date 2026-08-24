@@ -1,0 +1,99 @@
+---
+interface Props {
+  sticky?: boolean;
+}
+const { sticky = false } = Astro.props;
+const phoneDigits = '34611444163';
+const message = encodeURIComponent('Hola Vanessa, quiero consultarte un proyecto');
+const href = `https://wa.me/${phoneDigits}?text=${message}`;
+---
+
+{
+  sticky ? (
+    <a
+      id="whatsapp-sticky"
+      href={href}
+      target="_blank"
+      rel="noopener"
+      aria-label="Escríbeme por WhatsApp"
+      class="wa-sticky"
+    >
+      <svg viewBox="0 0 24 24" width="28" height="28" fill="#fff" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+        <path d="M12.004 2.003c-5.514 0-9.997 4.483-9.997 9.997 0 1.762.464 3.484 1.346 4.997L2 22l5.135-1.335a9.958 9.958 0 0 0 4.869 1.24h.004c5.514 0 9.997-4.483 9.997-9.997 0-2.673-1.04-5.183-2.929-7.072a9.937 9.937 0 0 0-7.072-2.833zm0 18.174h-.003a8.16 8.16 0 0 1-4.158-1.14l-.298-.177-3.048.793.814-2.972-.194-.306a8.184 8.184 0 0 1-1.256-4.376c0-4.522 3.68-8.202 8.203-8.202a8.15 8.15 0 0 1 5.802 2.402 8.15 8.15 0 0 1 2.399 5.802c0 4.523-3.68 8.176-8.261 8.176z" />
+      </svg>
+    </a>
+  ) : (
+    <a href={href} target="_blank" rel="noopener" class="wa-inline">
+      <svg viewBox="0 0 24 24" width="30" height="30" fill="#fff" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+        <path d="M12.004 2.003c-5.514 0-9.997 4.483-9.997 9.997 0 1.762.464 3.484 1.346 4.997L2 22l5.135-1.335a9.958 9.958 0 0 0 4.869 1.24h.004c5.514 0 9.997-4.483 9.997-9.997 0-2.673-1.04-5.183-2.929-7.072a9.937 9.937 0 0 0-7.072-2.833zm0 18.174h-.003a8.16 8.16 0 0 1-4.158-1.14l-.298-.177-3.048.793.814-2.972-.194-.306a8.184 8.184 0 0 1-1.256-4.376c0-4.522 3.68-8.202 8.203-8.202a8.15 8.15 0 0 1 5.802 2.402 8.15 8.15 0 0 1 2.399 5.802c0 4.523-3.68 8.176-8.261 8.176z" />
+      </svg>
+      <span>Escríbeme por WhatsApp</span>
+      <span aria-hidden="true">↗</span>
+    </a>
+  )
+}
+
+<style>
+  .wa-sticky {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 110;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    background: var(--whatsapp);
+    border-radius: 50%;
+    box-shadow: 0 14px 34px rgba(10, 10, 10, 0.3);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .wa-sticky:hover {
+    opacity: 0.88;
+  }
+
+  .wa-inline {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--whatsapp);
+    color: #fff;
+    padding: 24px 30px;
+    border-radius: 16px;
+    font-size: clamp(17px, 2vw, 24px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    transition: opacity 0.3s ease;
+  }
+
+  .wa-inline span:first-of-type {
+    flex: 1;
+  }
+
+  .wa-inline:hover {
+    opacity: 0.85;
+  }
+</style>
+
+<script>
+  const sticky = document.getElementById('whatsapp-sticky');
+  const target = document.getElementById('contacto');
+  if (sticky && target) {
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        const visible = entry.isIntersecting;
+        sticky.style.opacity = visible ? '0' : '1';
+        sticky.style.pointerEvents = visible ? 'none' : 'auto';
+        sticky.style.transform = visible ? 'scale(.8)' : 'scale(1)';
+      },
+      { threshold: 0.15 }
+    );
+    io.observe(target);
+  }
+</script>

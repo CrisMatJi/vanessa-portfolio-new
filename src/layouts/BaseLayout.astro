@@ -1,0 +1,87 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  jsonLd?: Record<string, unknown>;
+  noindex?: boolean;
+}
+
+const { title, description, ogImage, jsonLd, noindex = false } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const defaultOgImage = new URL('/og-image.jpg', Astro.site);
+---
+
+<!doctype html>
+<html lang="es-ES">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={canonicalURL} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImage ?? defaultOgImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body>
+    <div id="scroll-bar" class="scroll-bar"></div>
+    <Header />
+    <main id="top">
+      <slot />
+    </main>
+    <Footer />
+    <WhatsAppButton sticky />
+    <script>
+      const sweep = () => {
+        const h = window.innerHeight;
+        document.querySelectorAll('[data-reveal]:not([data-visible])').forEach((el) => {
+          const r = (el.parentElement ?? el).getBoundingClientRect();
+          if (r.top < h * 0.96) el.setAttribute('data-visible', '1');
+        });
+      };
+      requestAnimationFrame(sweep);
+      setTimeout(sweep, 300);
+      window.addEventListener('resize', sweep, { passive: true });
+      window.addEventListener('scroll', sweep, { passive: true });
+
+      const bar = document.getElementById('scroll-bar');
+      const header = document.querySelector('header[data-site-header]') as HTMLElement | null;
+      const onScroll = () => {
+        const y = Math.max(0, window.scrollY);
+        const max = document.body.scrollHeight - window.innerHeight;
+        if (bar) bar.style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
+        const solid = y > window.innerHeight * 0.7;
+        header?.classList.toggle('is-solid', solid);
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .scroll-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: var(--muted-4);
+    z-index: 120;
+  }
+</style>

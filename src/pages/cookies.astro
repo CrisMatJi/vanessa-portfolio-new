@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Política de cookies | Suárez Studio" description="Política de cookies de Suárez Studio." noindex>
+  <section class="section legal">
+    <h1>Política de cookies</h1>
+    <p class="draft-note">
+      Página en borrador. Este sitio, en su versión actual, no utiliza cookies de analítica ni de publicidad.
+      Actualizar este texto si en el futuro se añade Google Analytics u otra herramienta de medición.
+    </p>
+    <p>El sitio no instala cookies propias ni de terceros salvo las estrictamente necesarias para su funcionamiento.</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal {
+    max-width: 72ch;
+    padding-top: clamp(140px, 20vh, 200px);
+  }
+  .legal h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 24px;
+  }
+  .legal p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--body-copy);
+    margin-bottom: 16px;
+  }
+  .draft-note {
+    background: var(--panel);
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    color: var(--muted-3);
+  }
+</style>

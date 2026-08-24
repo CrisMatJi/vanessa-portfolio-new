@@ -1,0 +1,113 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/images/logo-suarez-black.png';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="grid">
+    <div class="brand">
+      <Image src={logo} alt="Suárez Studio" width={150} height={48} class="brand-logo" />
+      <p>Interiorismo arquitectónico en Cádiz. Proyecto, renders, planimetría y seguimiento de obra.</p>
+    </div>
+    <div class="col">
+      <p class="col-title">Navegación</p>
+      <a href="#servicios">Servicios</a>
+      <a href="#proyectos">Proyectos</a>
+      <a href="#proceso">Cómo trabajo</a>
+      <a href="#estudio">Sobre mí</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <div class="col">
+      <p class="col-title">Servicios</p>
+      <a href="#servicios">Proyecto integral de interiorismo</a>
+      <a href="#servicios">Proyecto llave en mano</a>
+      <a href="#servicios">Seguimiento de obra</a>
+      <a href="#servicios">Renders 3D</a>
+      <a href="#servicios">Planimetría</a>
+      <a href="#servicios">Asesorías de interiorismo</a>
+    </div>
+    <div class="col">
+      <p class="col-title">Contacto</p>
+      <a href="mailto:vanessa.cal.sua@gmail.com">vanessa.cal.sua@gmail.com</a>
+      <a href="tel:+34611444163">+34 611 44 41 63</a>
+      <a href="https://www.instagram.com/vanessa_suarez_interiorismo/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.linkedin.com/in/vanessa-calvente-suarez-932b14371/" target="_blank" rel="noopener"
+        >LinkedIn</a
+      >
+    </div>
+  </div>
+  <div class="bottom">
+    <p>&copy; {year} Suárez Studio · Cádiz</p>
+    <div class="legal">
+      <a href="/aviso-legal">Aviso legal</a>
+      <a href="/privacidad">Privacidad</a>
+      <a href="/cookies">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding: clamp(48px, 7vh, 80px) clamp(20px, 4vw, 56px) 34px;
+    display: flex;
+    flex-direction: column;
+    gap: 42px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+  }
+
+  .brand-logo {
+    width: 110px;
+    height: auto;
+    margin-bottom: 14px;
+  }
+
+  .brand p {
+    font-size: 14px;
+    color: var(--muted-3);
+    line-height: 1.6;
+    max-width: 28ch;
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    font-size: 15px;
+    color: var(--muted-3);
+  }
+
+  .col a:hover {
+    color: var(--ink);
+  }
+
+  .col-title {
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .bottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+    border-top: 1px solid var(--line);
+    padding-top: 22px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .legal {
+    display: flex;
+    gap: 20px;
+  }
+</style>

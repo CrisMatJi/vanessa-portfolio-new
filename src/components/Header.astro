@@ -1,0 +1,146 @@
+---
+import { Image } from 'astro:assets';
+import logoWhite from '../assets/images/logo-suarez-white.png';
+import logoBlack from '../assets/images/logo-suarez-black.png';
+---
+
+<header data-site-header class="header">
+  <a href="#top" aria-label="Suárez Studio — inicio" class="logo">
+    <Image
+      src={logoWhite}
+      alt="Suárez Studio, interiorismo arquitectónico en Cádiz"
+      width={140}
+      height={45}
+      class="logo-img logo-img-white"
+    />
+    <Image
+      src={logoBlack}
+      alt="Suárez Studio, interiorismo arquitectónico en Cádiz"
+      width={140}
+      height={45}
+      class="logo-img logo-img-black"
+    />
+  </a>
+  <nav class="nav">
+    <a href="#servicios">Servicios</a>
+    <a href="#proyectos">Proyectos</a>
+    <a href="#proceso">Proceso</a>
+    <a href="#estudio">Estudio</a>
+    <a href="#contacto" class="nav-cta">Contacto</a>
+  </nav>
+</header>
+
+<style>
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 24px clamp(20px, 4vw, 56px);
+    color: #fff;
+    transition:
+      background 0.35s ease,
+      padding 0.35s ease,
+      border-color 0.35s ease,
+      color 0.35s ease;
+    border-bottom: 1px solid transparent;
+  }
+
+  .header.is-solid {
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(14px);
+    border-bottom-color: var(--line);
+    color: var(--ink);
+    padding: 15px clamp(20px, 4vw, 56px);
+  }
+
+  .logo {
+    position: relative;
+    display: block;
+    width: 88px;
+    flex: none;
+  }
+
+  .logo-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: opacity 0.35s ease;
+  }
+
+  .logo-img-black {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
+
+  .header.is-solid .logo-img-white {
+    opacity: 0;
+  }
+
+  .header.is-solid .logo-img-black {
+    opacity: 1;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, 2vw, 30px);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .nav a {
+    white-space: nowrap;
+  }
+
+  .nav a:hover {
+    opacity: 0.7;
+  }
+
+  .nav-cta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    color: var(--ink);
+    padding: 13px 24px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 700;
+    transition:
+      opacity 0.3s ease,
+      background 0.35s ease,
+      color 0.35s ease;
+  }
+
+  .header.is-solid .nav-cta {
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .nav-cta:hover {
+    opacity: 0.8;
+  }
+
+  @media (max-width: 720px) {
+    .nav {
+      gap: 10px;
+      font-size: 12px;
+    }
+    .nav-cta {
+      padding: 10px 18px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .nav a:not(.nav-cta):not(:last-of-type) {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,1045 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { projects } from '../data/projects';
+
+import heroImage from '../assets/images/projects/ajibe/foto-patio.jpeg';
+import vanessaPortrait from '../assets/images/vanessa.jpeg';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: 'Suárez Studio — Vanessa Suárez, Interiorismo Arquitectónico',
+  description:
+    'Estudio de interiorismo arquitectónico en Cádiz: proyecto integral, proyecto llave en mano, seguimiento de obra, renders 3D, planimetría y asesorías. Proyectos online en toda España.',
+  url: 'https://www.suarezstudio.es/',
+  telephone: '+34611444163',
+  areaServed: ['Cádiz', 'Andalucía', 'España'],
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Cádiz',
+    addressRegion: 'Andalucía',
+    addressCountry: 'ES',
+  },
+  founder: {
+    '@type': 'Person',
+    name: 'Vanessa Suárez',
+    jobTitle: 'Interiorista',
+  },
+  sameAs: [
+    'https://www.instagram.com/vanessa_suarez_interiorismo/',
+    'https://www.linkedin.com/in/vanessa-calvente-suarez-932b14371/',
+  ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Servicios',
+    itemListElement: [
+      'Proyecto integral de interiorismo',
+      'Proyecto llave en mano',
+      'Seguimiento de obra',
+      'Renders 3D',
+      'Planimetría',
+      'Asesorías de interiorismo',
+    ].map((name) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name } })),
+  },
+};
+
+const servicios = [
+  'Decoración',
+  'Mobiliario',
+  'Materiales',
+  'Acabados',
+  'Nueva distribución',
+  'Planimetría técnica',
+  'Modelado / render 3D',
+  'Acompañamiento en ejecución',
+];
+---
+
+<BaseLayout
+  title="Interiorismo arquitectónico en Cádiz | Suárez Studio"
+  description="Interiorismo arquitectónico en Cádiz y Andalucía. Proyecto integral, llave en mano, renders 3D, planimetría y seguimiento de obra. También proyectos online en toda España. Escríbeme por WhatsApp."
+  jsonLd={jsonLd}
+>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg">
+      <Image src={heroImage} alt="Patio interior con luz natural, proyecto de interiorismo Suárez Studio" width={1800} height={1200} priority />
+    </div>
+    <div class="hero-scrim"></div>
+    <div class="hero-content">
+      <div class="hero-top">
+        <div class="hero-lede">
+          <p data-reveal>
+            Diseño interiores con identidad, sensibilidad y detalle. Del plano y los renders hasta la última
+            lámpara, en Cádiz, Andalucía y online en toda España.
+          </p>
+          <div data-reveal class="hero-ctas">
+            <a href="#contacto" class="btn-solid">Empezar un proyecto ↗</a>
+            <a href="#servicios" class="btn-outline">Ver servicios</a>
+          </div>
+        </div>
+        <p data-reveal class="eyebrow hero-eyebrow">Interiorismo arquitectónico · Cádiz</p>
+      </div>
+      <h1 class="hero-title">
+        <span class="reveal-line"><span>Suárez Studio<span class="reg">®</span></span></span>
+      </h1>
+    </div>
+  </section>
+
+  <!-- Marquee band -->
+  <section class="band">
+    <div class="band-text">Casas que se parecen a quien vive en ellas</div>
+    <div class="band-grid">
+      <div data-reveal class="band-item">
+        <p class="band-title">Vivienda particular</p>
+        <p class="band-copy">Reformas integrales y casas que cambian de vida.</p>
+      </div>
+      <div data-reveal class="band-item">
+        <p class="band-title">Obra nueva</p>
+        <p class="band-copy">Unifamiliares desde el plano, junto a tu arquitecto.</p>
+      </div>
+      <div data-reveal class="band-item">
+        <p class="band-title">Promoción e inversión</p>
+        <p class="band-copy">Producto bien resuelto y renders que ayudan a vender.</p>
+      </div>
+      <div data-reveal class="band-item">
+        <p class="band-title">Proyectos online</p>
+        <p class="band-copy">Toda España, con el mismo nivel de detalle.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Servicios -->
+  <section id="servicios" class="section">
+    <div class="section-head">
+      <h2 class="h-xl">
+        <span class="reveal-line"><span>En qué puedo</span></span>
+        <span class="reveal-line"><span class="dim">ayudarte</span></span>
+      </h2>
+      <p class="eyebrow">01 — Servicios</p>
+    </div>
+    <div class="services-grid">
+      {
+        servicios.map((s, i) => (
+          <article data-reveal class="service-card" style={`transition-delay:${(i % 4) * 0.07}s`}>
+            <span class="service-num">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{s}</h3>
+            <a href="#contacto" class="link">
+              Consultar ↗
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Proyectos -->
+  <section id="proyectos" class="section proyectos">
+    <div class="section-head">
+      <h2 class="h-xl">
+        <span class="reveal-line"><span>Proyectos</span></span>
+        <span class="reveal-line"><span class="dim">realizados</span></span>
+      </h2>
+      <p class="eyebrow">02 — Proyectos</p>
+    </div>
+    <div class="proyectos-grid">
+      {projects.map((project, i) => <ProjectCard project={project} index={i} />)}
+    </div>
+  </section>
+
+  <!-- Proceso -->
+  <section id="proceso" class="proceso">
+    <div class="section-head dark">
+      <h2 class="h-xl">
+        <span class="reveal-line"><span>Cuatro fases,</span></span>
+        <span class="reveal-line"><span class="dim-light">cero sorpresas</span></span>
+      </h2>
+      <p class="proceso-lede">
+        Casi todos los sustos de una reforma vienen de decisiones que se toman tarde. Este orden existe justamente
+        para que eso no pase.
+      </p>
+    </div>
+    <div class="proceso-list">
+      <article class="proceso-card fase-1">
+        <div>
+          <span class="fase-tag">FASE 01</span>
+          <h3>Hablamos</h3>
+        </div>
+        <div>
+          <p class="fase-copy">
+            Me cuentas la casa, cómo la usáis y qué presupuesto manejas. Sin formularios eternos: una conversación
+            por WhatsApp o una llamada corta.
+          </p>
+          <p class="fase-copy-sub">
+            Si veo que no soy la persona adecuada para tu proyecto, te lo digo ahí mismo y te oriento hacia quien sí
+            lo es.
+          </p>
+        </div>
+      </article>
+
+      <article class="proceso-card fase-2">
+        <div>
+          <span class="fase-tag">FASE 02</span>
+          <h3>Propuesta y presupuesto</h3>
+        </div>
+        <div>
+          <p class="fase-copy">
+            Concepto, distribución, alcance y una cifra cerrada. Sabes lo que incluye y lo que no antes de firmar
+            nada.
+          </p>
+          <p class="fase-copy-sub">
+            El calendario va dentro del presupuesto: fechas de entrega de proyecto, de inicio de obra y de entrega
+            final.
+          </p>
+        </div>
+      </article>
+
+      <article class="proceso-card fase-3">
+        <div>
+          <span class="fase-tag">FASE 03</span>
+          <h3>Proyecto, planos y renders</h3>
+        </div>
+        <div>
+          <p class="fase-copy">
+            Aquí es donde se ajusta todo: en pantalla, no en obra. Ves tu casa terminada antes de tocar un tabique.
+          </p>
+          <p class="fase-copy-sub">
+            Planimetría completa, memoria de calidades y renders. Cuando te gusta lo que ves, empezamos.
+          </p>
+        </div>
+      </article>
+
+      <article class="proceso-card fase-4">
+        <div>
+          <span class="fase-tag">FASE 04</span>
+          <h3>Obra y entrega</h3>
+        </div>
+        <div>
+          <p class="fase-copy">
+            Seguimiento en obra, control de calidades y entrega con la casa vestida y lista para vivir.
+          </p>
+          <p class="fase-copy-sub">
+            En proyectos online, el seguimiento es por vídeo con tu constructor, con la misma frecuencia y los
+            mismos informes.
+          </p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Estudio / Sobre mí -->
+  <section id="estudio" class="section estudio">
+    <div class="estudio-grid">
+      <div data-reveal class="estudio-photo">
+        <Image src={vanessaPortrait} alt="Retrato de Vanessa Suárez, interiorista" width={900} height={1200} />
+      </div>
+      <div class="estudio-copy">
+        <p class="eyebrow">03 — Sobre mí</p>
+        <h2 class="h-lg">
+          <span class="reveal-line"><span>Trabajo</span></span>
+          <span class="reveal-line"><span class="dim">de una en una</span></span>
+        </h2>
+        <p class="body-copy">
+          No llevo veinte proyectos a la vez, y por eso el teléfono lo cojo yo. Vengo del interiorismo
+          arquitectónico: me importa tanto dónde cae la luz a las siete de la tarde como el canto del mueble de la
+          cocina.
+        </p>
+        <p class="body-copy">
+          Estoy en Cádiz y trabajo en toda Andalucía de forma presencial. Fuera de aquí llevo proyectos online:
+          mismos planos, mismos renders y videollamadas de seguimiento con tu constructor. Atiendo también a
+          promotores e inversores que necesitan producto bien resuelto y bien contado.
+        </p>
+        <div class="estudio-stats">
+          <div><p class="stat">Cádiz</p><p class="stat-label">base del estudio</p></div>
+          <div><p class="stat">Online</p><p class="stat-label">resto de España</p></div>
+          <div><p class="stat">Una</p><p class="stat-label">interlocutora, de principio a fin</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section">
+    <div class="faq-grid">
+      <div>
+        <p class="eyebrow" style="margin-bottom:20px">04 — Dudas frecuentes</p>
+        <h2 class="h-lg">
+          <span class="reveal-line"><span>Lo que todo el mundo me pregunta</span></span>
+        </h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>¿Cuánto cuesta un proyecto?</summary>
+          <p>
+            Depende de los metros, del alcance y de si hay obra o solo proyecto. Escríbeme por WhatsApp con cuatro
+            datos y te doy una horquilla realista el mismo día, sin compromiso.
+          </p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Cómo funciona un proyecto online?</summary>
+          <p>
+            Me envías planos, medidas y fotos o vídeo de la casa. A partir de ahí trabajo igual que en presencial:
+            propuesta, planimetría, renders y videollamadas de seguimiento con tu constructor. Funciona en toda
+            España.
+          </p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Puedo contratar solo el proyecto, sin la obra?</summary>
+          <p>
+            Claro. Mucha gente contrata proyecto, planimetría y renders y ejecuta con su propio constructor. La
+            documentación se entrega lista para presupuestar sin depender de mí.
+          </p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Trabajas con promotores e inversores?</summary>
+          <p>
+            Sí. Para promoción trabajo el producto completo: distribución, calidades, renders de venta y planimetría
+            comercial. El objetivo ahí no es solo que se vea bien, es que se venda antes y mejor.
+          </p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contacto -->
+  <section id="contacto" class="contacto">
+    <h2 class="h-xxl">
+      <span class="reveal-line"><span>Cuéntame qué casa</span></span>
+      <span class="reveal-line"><span class="dim-light">tienes entre manos</span></span>
+    </h2>
+    <div class="contacto-grid">
+      <div class="contacto-left">
+        <p class="contacto-lede">
+          Lo más rápido es WhatsApp: escríbeme con los metros, dónde está la casa y qué te gustaría conseguir. Te
+          respondo yo, normalmente el mismo día.
+        </p>
+        <WhatsAppButton />
+        <div class="contacto-info">
+          <a href="mailto:vanessa.cal.sua@gmail.com">vanessa.cal.sua@gmail.com</a>
+          <a href="tel:+34611444163">+34 611 44 41 63</a>
+          <p>Cádiz · Andalucía · Proyectos online en toda España</p>
+        </div>
+      </div>
+
+      <div class="contacto-right">
+        <p id="form-status-sent" class="form-sent" hidden>
+          <span class="form-sent-title">Recibido. Gracias.</span>
+          <span
+            >Te escribo en menos de 24&nbsp;h laborables. Si tienes prisa, mándame un WhatsApp y lo vemos antes.</span
+          >
+        </p>
+        <form id="contact-form" class="form">
+          <p class="eyebrow">O escríbeme aquí</p>
+          <div class="form-row">
+            <label>Nombre<input name="from_name" type="text" required placeholder="Nombre y apellidos" /></label>
+            <label>Email<input name="reply_to" type="email" required placeholder="tu@email.com" /></label>
+          </div>
+          <div class="form-row">
+            <label>Teléfono<input name="telefono" type="tel" placeholder="Opcional" /></label>
+            <label>Localidad<input name="localidad" type="text" placeholder="Cádiz, Jerez, Sevilla…" /></label>
+          </div>
+          <div class="form-row">
+            <label>
+              Servicio
+              <select name="servicio">
+                <option>Proyecto integral de interiorismo</option>
+                <option>Proyecto llave en mano</option>
+                <option>Seguimiento de obra</option>
+                <option>Renders 3D</option>
+                <option>Planimetría</option>
+                <option>Asesorías de interiorismo</option>
+              </select>
+            </label>
+            <label>
+              Tipo de cliente
+              <select name="perfil">
+                <option>Reformo mi vivienda</option>
+                <option>Obra nueva / unifamiliar</option>
+                <option>Promotor o inversor</option>
+                <option>Proyecto online, fuera de Andalucía</option>
+              </select>
+            </label>
+          </div>
+          <label>Cuéntame<textarea name="mensaje_extra" rows="4" placeholder="Metros, estado de la vivienda, plazos, qué te gustaría conseguir…"
+            ></textarea></label>
+          <input type="hidden" name="subject" value="Nueva consulta desde suarezstudio.es" />
+          <input type="hidden" name="message" />
+          <label class="form-checkbox">
+            <input type="checkbox" required />
+            <span>He leído y acepto la <a href="/privacidad">política de privacidad</a>. Tus datos se usan solo para responderte.</span>
+          </label>
+          <button type="submit" class="btn-solid form-submit">Enviar consulta ↗</button>
+          <p id="form-status-error" class="form-error" hidden>Algo salió mal. Escríbeme directamente por WhatsApp o email.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Zonas -->
+  <section id="zonas" class="section zonas">
+    <h2 class="h-md">
+      <span class="reveal-line"><span>Dónde trabajo</span></span>
+    </h2>
+    <div class="zonas-grid">
+      <div>
+        <p class="zonas-title">Provincia de Cádiz</p>
+        <p class="zonas-copy">
+          Cádiz · Jerez de la Frontera · El Puerto de Santa María · San Fernando · Chiclana · Puerto Real · Sanlúcar
+          de Barrameda · Rota · Conil · Vejer · Tarifa
+        </p>
+      </div>
+      <div>
+        <p class="zonas-title">Resto de Andalucía</p>
+        <p class="zonas-copy">Sevilla · Málaga · Marbella · Estepona · Huelva · Córdoba · Granada</p>
+      </div>
+      <div>
+        <p class="zonas-title">Toda España, online</p>
+        <p class="zonas-copy">
+          Proyecto completo, planimetría y renders a distancia, con videollamadas de seguimiento en obra. Sin
+          desplazamientos que encarezcan el presupuesto.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import emailjs from '@emailjs/browser';
+
+  const SERVICE_ID = 'service_fu6s5ou';
+  const TEMPLATE_ID = 'template_eezjrti';
+  const PUBLIC_KEY = '1JgEPD0mQL9idQIIo';
+
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const sent = document.getElementById('form-status-sent');
+  const errorMsg = document.getElementById('form-status-error');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const combined = [
+      `Teléfono: ${data.get('telefono') || '—'}`,
+      `Localidad: ${data.get('localidad') || '—'}`,
+      `Servicio: ${data.get('servicio')}`,
+      `Tipo de cliente: ${data.get('perfil')}`,
+      '',
+      String(data.get('mensaje_extra') || ''),
+    ].join('\n');
+    (form.elements.namedItem('message') as HTMLInputElement).value = combined;
+
+    const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    submitBtn.disabled = true;
+    errorMsg?.setAttribute('hidden', '');
+
+    try {
+      await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form, { publicKey: PUBLIC_KEY });
+      form.hidden = true;
+      sent?.removeAttribute('hidden');
+    } catch {
+      errorMsg?.removeAttribute('hidden');
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+
+<style>
+  /* Hero */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    background: var(--ink);
+    color: #fff;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: -6% 0;
+  }
+  .hero-bg :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(10, 10, 10, 0.55) 0%,
+      rgba(10, 10, 10, 0.15) 32%,
+      rgba(10, 10, 10, 0.72) 78%,
+      rgba(10, 10, 10, 0.9) 100%
+    );
+  }
+  .hero-content {
+    position: relative;
+    padding: 0 clamp(20px, 4vw, 56px) clamp(18px, 3vh, 34px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(28px, 5vh, 58px);
+  }
+  .hero-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 28px;
+  }
+  .hero-lede {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    max-width: 38ch;
+  }
+  .hero-lede p {
+    font-size: clamp(16px, 1.35vw, 20px);
+    line-height: 1.5;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.92);
+  }
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .btn-solid {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    color: var(--ink);
+    padding: 18px 30px;
+    border-radius: 100px;
+    font-size: 15px;
+    font-weight: 700;
+    transition: opacity 0.3s ease;
+    width: fit-content;
+  }
+  .btn-solid:hover {
+    opacity: 0.82;
+  }
+  .btn-outline {
+    display: flex;
+    align-items: center;
+    padding: 18px 30px;
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    border-radius: 100px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    transition:
+      background 0.3s ease,
+      color 0.3s ease,
+      border-color 0.3s ease;
+  }
+  .btn-outline:hover {
+    background: #fff;
+    color: var(--ink);
+    border-color: #fff;
+  }
+  .hero-eyebrow {
+    color: rgba(255, 255, 255, 0.62);
+  }
+  .hero-title {
+    font-size: clamp(2.6rem, 12vw, 15rem);
+    line-height: 0.92;
+    letter-spacing: -0.045em;
+    font-weight: 800;
+  }
+  .reg {
+    font-size: 0.34em;
+    vertical-align: top;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  /* Band */
+  .band {
+    background: var(--ink);
+    color: #fff;
+    padding: clamp(56px, 9vh, 110px) 0 clamp(46px, 7vh, 86px);
+    overflow: hidden;
+  }
+  .band-text {
+    white-space: nowrap;
+    font-size: clamp(2.6rem, 9.4vw, 11rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    font-weight: 800;
+    padding-left: clamp(20px, 4vw, 56px);
+  }
+  .band-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 28px;
+    padding: clamp(40px, 6vh, 72px) clamp(20px, 4vw, 56px) 0;
+  }
+  .band-item {
+    border-top: 1px solid #333;
+    padding-top: 18px;
+  }
+  .band-title {
+    font-size: clamp(17px, 1.5vw, 20px);
+    font-weight: 700;
+  }
+  .band-copy {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 8px;
+    line-height: 1.55;
+  }
+
+  /* Shared section heads */
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 26px;
+    margin-bottom: clamp(40px, 6vh, 68px);
+  }
+  .h-xl {
+    font-size: clamp(2.4rem, 6.2vw, 6rem);
+    line-height: 0.98;
+    max-width: 16ch;
+  }
+  .h-lg {
+    font-size: clamp(2.2rem, 5vw, 4.6rem);
+    line-height: 1;
+  }
+  .h-md {
+    font-size: clamp(1.8rem, 3.4vw, 3.2rem);
+    line-height: 1.05;
+    margin-bottom: 26px;
+  }
+  .h-xxl {
+    font-size: clamp(2.6rem, 8vw, 9rem);
+    line-height: 0.96;
+    max-width: 15ch;
+    margin-bottom: clamp(40px, 6vh, 70px);
+  }
+  .dim {
+    color: var(--muted-4);
+  }
+  .dim-light {
+    color: #b0b0b0;
+  }
+
+  /* Servicios */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+  }
+  .service-card {
+    background: var(--panel);
+    padding: clamp(24px, 3vw, 36px);
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 190px;
+    transition:
+      background 0.35s ease,
+      color 0.35s ease;
+  }
+  .service-card:hover {
+    background: var(--ink);
+    color: #fff;
+  }
+  .service-num {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--muted-4);
+  }
+  .service-card h3 {
+    font-size: clamp(1.3rem, 1.8vw, 1.7rem);
+    line-height: 1.1;
+  }
+  .service-card .link {
+    margin-top: auto;
+    font-size: 14px;
+    font-weight: 700;
+    border-bottom: 1.5px solid currentColor;
+    padding-bottom: 4px;
+    align-self: flex-start;
+  }
+
+  /* Proyectos */
+  .proyectos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: clamp(24px, 3vw, 44px);
+  }
+
+  /* Proceso */
+  .proceso {
+    background: var(--ink);
+    color: #fff;
+    padding: clamp(70px, 11vh, 130px) clamp(20px, 4vw, 56px) clamp(80px, 13vh, 150px);
+  }
+  .section-head.dark {
+    display: block;
+    border: 0;
+    padding: 0;
+    margin-bottom: clamp(36px, 6vh, 64px);
+  }
+  .proceso-lede {
+    max-width: 36ch;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin-top: 16px;
+  }
+  .proceso-list {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 4vh, 40px);
+  }
+  .proceso-card {
+    position: sticky;
+    top: 108px;
+    border-radius: 22px;
+    padding: clamp(28px, 4vw, 58px);
+    min-height: clamp(300px, 46vh, 420px);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: clamp(20px, 3vw, 52px);
+    align-items: start;
+    box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.4);
+  }
+  .fase-1 {
+    background: #fff;
+    color: var(--ink);
+  }
+  .fase-2 {
+    background: var(--panel);
+    color: var(--ink);
+    top: 128px;
+  }
+  .fase-3 {
+    background: var(--ink);
+    color: #fff;
+    border: 1px solid #333;
+    top: 148px;
+  }
+  .fase-4 {
+    background: #2e2e2e;
+    color: #fff;
+    top: 168px;
+  }
+  .fase-tag {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    display: block;
+    margin-bottom: 16px;
+  }
+  .fase-1 .fase-tag,
+  .fase-2 .fase-tag {
+    color: var(--muted-4);
+  }
+  .fase-3 .fase-tag {
+    color: #b0b0b0;
+  }
+  .fase-4 .fase-tag {
+    color: rgba(255, 255, 255, 0.75);
+  }
+  .proceso-card h3 {
+    font-size: clamp(1.9rem, 3.4vw, 3.4rem);
+    line-height: 1;
+  }
+  .fase-copy {
+    font-size: clamp(16px, 1.4vw, 19px);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .fase-1 .fase-copy {
+    color: #3a3a3a;
+  }
+  .fase-2 .fase-copy {
+    color: #3a3a3a;
+  }
+  .fase-3 .fase-copy {
+    color: #d6d6d6;
+  }
+  .fase-4 .fase-copy {
+    color: rgba(255, 255, 255, 0.95);
+  }
+  .fase-copy-sub {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .fase-1 .fase-copy-sub,
+  .fase-2 .fase-copy-sub {
+    color: #7a7a7a;
+  }
+  .fase-3 .fase-copy-sub {
+    color: var(--muted);
+  }
+  .fase-4 .fase-copy-sub {
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  /* Estudio */
+  .estudio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: clamp(36px, 5vw, 80px);
+    align-items: center;
+  }
+  .estudio-photo {
+    position: relative;
+    width: 100%;
+    height: clamp(340px, 62vh, 620px);
+    border-radius: 18px;
+    overflow: hidden;
+  }
+  .estudio-photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .estudio-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .body-copy {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--body-copy);
+    max-width: 52ch;
+  }
+  .estudio-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 22px;
+    border-top: 1px solid var(--line);
+    padding-top: 26px;
+    margin-top: 6px;
+  }
+  .stat {
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+  }
+  .stat-label {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  /* FAQ */
+  .faq-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .faq-item {
+    border-top: 1px solid var(--line);
+  }
+  .faq-item:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+  .faq-item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 24px 0;
+    font-size: clamp(16px, 1.5vw, 20px);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    list-style: none;
+  }
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-item summary::after {
+    content: '+';
+    font-size: 24px;
+    color: var(--muted);
+  }
+  .faq-item[open] summary::after {
+    content: '−';
+    color: var(--muted-4);
+  }
+  .faq-item p {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--body-copy);
+    max-width: 56ch;
+    padding-bottom: 26px;
+  }
+
+  /* Contacto */
+  .contacto {
+    background: var(--ink);
+    color: #fff;
+    padding: clamp(80px, 13vh, 150px) clamp(20px, 4vw, 56px);
+  }
+  .contacto-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: clamp(36px, 5vw, 80px);
+    align-items: start;
+  }
+  .contacto-left {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .contacto-lede {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--muted);
+    max-width: 42ch;
+  }
+  .contacto-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 16px;
+    color: var(--muted);
+    border-top: 1px solid #333;
+    padding-top: 22px;
+  }
+  .contacto-info a:hover {
+    color: #fff;
+  }
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .form-sent {
+    flex-direction: column;
+    gap: 14px;
+    border: 1px solid #333;
+    border-radius: 18px;
+    padding: clamp(28px, 4vw, 48px);
+  }
+
+  .form-sent:not([hidden]) {
+    display: flex;
+  }
+  .form-sent-title {
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .form-sent span:last-child {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+  }
+  .form label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .form input,
+  .form select,
+  .form textarea {
+    background: none;
+    border: 0;
+    border-bottom: 1px solid #333;
+    padding: 11px 0;
+    color: #fff;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .form select {
+    background: var(--ink);
+  }
+  .form textarea {
+    resize: vertical;
+  }
+  .form-checkbox {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--muted);
+    text-transform: none;
+    letter-spacing: normal;
+    font-weight: 400;
+    margin-top: 4px;
+  }
+  .form-checkbox input {
+    margin-top: 3px;
+    accent-color: var(--muted-4);
+  }
+  .form-checkbox a {
+    text-decoration: underline;
+  }
+  .form-submit {
+    margin-top: 12px;
+    border: 0;
+    cursor: pointer;
+    align-self: flex-start;
+  }
+  .form-error {
+    font-size: 14px;
+    color: #ff8a80;
+  }
+
+  /* Zonas */
+  .zonas {
+    padding-top: clamp(60px, 9vh, 105px);
+    padding-bottom: 0;
+  }
+  .zonas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 28px;
+    border-top: 1px solid var(--line);
+    padding-top: 28px;
+  }
+  .zonas-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted-4);
+    margin-bottom: 10px;
+  }
+  .zonas-copy {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--muted-3);
+  }
+</style>
