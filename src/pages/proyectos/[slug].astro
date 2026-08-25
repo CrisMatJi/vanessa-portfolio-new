@@ -45,7 +45,15 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
 <BaseLayout title={title} description={description} jsonLd={jsonLd}>
   <article class="project">
     <div class="back-link-wrap">
-      <a href="/#proyectos" class="back-link">← Volver a proyectos</a>
+      <a href="/#proyectos" class="back-link">
+        <span class="back-link-icon" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </span>
+        Volver a proyectos
+      </a>
     </div>
     <header class="project-header">
       <div class="header-grid">
@@ -97,18 +105,27 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
       }
     </div>
 
-    <div class="cta">
-      <p>¿Tienes un espacio que te gustaría transformar así?</p>
-      <a href="/#contacto" class="btn-solid">Cuéntame tu proyecto ↗</a>
-    </div>
+    <div class="end-screen">
+      <div class="end-card">
+        <a href="/#contacto" class="end-cta">
+          <p>¿Tienes un espacio que te gustaría transformar así?</p>
+          <span class="btn-solid">Cuéntame tu proyecto ↗</span>
+        </a>
 
-    <a href={`/proyectos/${nextProject.slug}/`} class="next-project">
-      <span class="next-label">Siguiente proyecto</span>
-      <span class="next-row">
-        <span class="next-title">{nextProject.title}</span>
-        <span class="next-arrow">→</span>
-      </span>
-    </a>
+        <a href={`/proyectos/${nextProject.slug}/`} class="end-next">
+          <Image src={nextProject.cover} alt={nextProject.coverAlt} width={900} height={720} loading="lazy" />
+          <div class="end-next-scrim" />
+          <div class="end-next-content">
+            <div class="end-next-copy">
+              <span class="end-next-label">Siguiente proyecto</span>
+              <span class="end-next-title">{nextProject.title}</span>
+              <span class="end-next-subtitle">{nextProject.subtitle}</span>
+            </div>
+            <span class="end-next-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+      </div>
+    </div>
   </article>
 </BaseLayout>
 
@@ -119,17 +136,35 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
   .back-link {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    padding: 6px 20px 6px 6px;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    background: #fff;
     font-size: 14px;
-    font-weight: 600;
-    color: var(--muted-3);
+    font-weight: 700;
+    color: var(--ink);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
     transition:
-      color 0.2s ease,
-      gap 0.2s ease;
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
   }
   .back-link:hover {
-    color: var(--ink);
-    gap: 12px;
+    border-color: var(--ink);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transform: translateX(-2px);
+  }
+  .back-link-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: #fff;
   }
 
   .project-header {
@@ -257,23 +292,6 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
     }
   }
 
-  .cta {
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: clamp(56px, 8vh, 96px) clamp(20px, 4vw, 56px) clamp(80px, 12vh, 140px);
-    border-top: 1px solid var(--line);
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 22px;
-  }
-  .cta p {
-    font-size: clamp(1.3rem, 2.4vw, 1.7rem);
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    max-width: 32ch;
-  }
   .btn-solid {
     display: inline-flex;
     align-items: center;
@@ -286,49 +304,126 @@ const nextProject = projects[(currentIndex + 1) % projects.length];
     font-weight: 700;
     transition: opacity 0.3s ease;
   }
-  .btn-solid:hover {
+
+  /* End screen: CTA + next-project teaser, side by side in one card */
+  .end-screen {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: clamp(56px, 8vh, 96px) clamp(20px, 4vw, 56px) clamp(80px, 12vh, 140px);
+    border-top: 1px solid var(--line);
+  }
+  .end-card {
+    display: flex;
+    align-items: stretch;
+    min-height: clamp(300px, 40vh, 360px);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    overflow: hidden;
+  }
+
+  .end-cta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 22px;
+    padding: clamp(32px, 5vw, 56px);
+    background: #fafafa;
+    transition: background 0.25s ease;
+  }
+  .end-cta:hover {
+    background: var(--panel);
+  }
+  .end-cta p {
+    font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    max-width: 22ch;
+  }
+  .end-cta:hover .btn-solid {
     opacity: 0.82;
   }
 
-  .next-project {
-    display: block;
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: clamp(28px, 4vh, 44px) clamp(20px, 4vw, 56px) clamp(56px, 9vh, 96px);
-    border-top: 1px solid var(--line);
+  .end-next {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    color: #fff;
   }
-  .next-label {
-    display: block;
+  .end-next :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s var(--ease);
+  }
+  .end-next:hover :global(img) {
+    transform: scale(1.06);
+  }
+  .end-next-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0.72) 100%);
+  }
+  .end-next-content {
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    padding: clamp(28px, 4vw, 40px);
+  }
+  .end-next-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .end-next-label {
     font-size: 13px;
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 14px;
+    color: rgba(255, 255, 255, 0.85);
   }
-  .next-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-  }
-  .next-title {
-    font-size: clamp(2.2rem, 7vw, 5.5rem);
+  .end-next-title {
+    font-size: clamp(2rem, 5vw, 3.4rem);
     font-weight: 800;
     letter-spacing: -0.03em;
     line-height: 1;
-    transition: opacity 0.3s ease;
   }
-  .next-arrow {
-    font-size: clamp(1.6rem, 3vw, 2.4rem);
-    color: var(--muted-3);
+  .end-next-subtitle {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 28ch;
+  }
+  .end-next-arrow {
     flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
     transition: transform 0.3s var(--ease);
   }
-  .next-project:hover .next-title {
-    opacity: 0.72;
+  .end-next:hover .end-next-arrow {
+    transform: translateX(4px);
   }
-  .next-project:hover .next-arrow {
-    transform: translateX(10px);
+
+  @media (max-width: 720px) {
+    .end-card {
+      flex-direction: column;
+      min-height: 0;
+    }
+    .end-next {
+      aspect-ratio: 4 / 3;
+    }
   }
 </style>
