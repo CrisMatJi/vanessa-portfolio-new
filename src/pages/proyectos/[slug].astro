@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { projects } from '../../data/projects';
+import type { ProjectImage } from '../../data/projects';
 
 export function getStaticPaths() {
   return projects.map((project) => ({
@@ -23,67 +24,74 @@ const jsonLd = {
   about: project.subtitle,
 };
 
-// Editorial layout, ported from the previous site: images with a caption come
-// first (full-width, caption centered below), then any remaining images run
-// as a side-by-side duo, then the rest fall into a standard grid gallery.
+// Images with a caption run as alternating image/text rows (left/right,
+// right/left...); everything after that runs in pairs, with a lone last
+// image (if the count is odd) shown on its own.
 const captionedCount = project.images.filter((img) => img.caption).length;
 const captioned = project.images.slice(0, captionedCount);
 const rest = project.images.slice(captionedCount);
-const duoCount = rest.length >= 2 ? 2 : 0;
-const duo = rest.slice(0, duoCount);
-const gallery = rest.slice(duoCount);
+
+const pairs: ProjectImage[][] = [];
+let lone: ProjectImage | null = null;
+for (let i = 0; i < rest.length; i += 2) {
+  if (i + 1 < rest.length) pairs.push([rest[i], rest[i + 1]]);
+  else lone = rest[i];
+}
 ---
 
 <BaseLayout title={title} description={description} jsonLd={jsonLd}>
   <article class="project">
-    <header class="project-header section">
-      <p class="eyebrow">{project.category}</p>
-      <h1>{project.title}</h1>
-      <p class="subtitle">{project.subtitle}</p>
+    <header class="project-header">
+      <div class="header-grid">
+        <div class="header-left">
+          <p class="eyebrow">{project.category}</p>
+          <h1>{project.title}</h1>
+          <p class="subtitle">{project.subtitle}</p>
+        </div>
+        <div class="header-right">
+          <p class="intro-text">{project.description}</p>
+        </div>
+      </div>
     </header>
 
-    <div class="project-intro">
-      <p>{project.description}</p>
+    <div class="project-content">
+      <div class="divider" />
+
+      {
+        captioned.map((img, i) => (
+          <div class:list={['content-row', { rev: i % 2 === 1 }]}>
+            <div class="row-img">
+              <Image src={img.src} alt={img.alt} width={1200} height={800} loading={i === 0 ? 'eager' : 'lazy'} />
+            </div>
+            <div class="row-text">
+              <p>{img.caption}</p>
+            </div>
+          </div>
+        ))
+      }
+
+      {
+        pairs.map((pair) => (
+          <div class="pair">
+            {pair.map((img) => (
+              <div class="pair-img">
+                <Image src={img.src} alt={img.alt} width={900} height={675} loading="lazy" />
+              </div>
+            ))}
+          </div>
+        ))
+      }
+
+      {
+        lone && (
+          <div class="lone">
+            <Image src={lone.src} alt={lone.alt} width={1200} height={675} loading="lazy" />
+          </div>
+        )
+      }
     </div>
 
-    {
-      captioned.map((img, i) => (
-        <div class="image-section">
-          <div class="image-full">
-            <Image src={img.src} alt={img.alt} width={1600} height={1067} loading={i === 0 ? 'eager' : 'lazy'} />
-          </div>
-          <div class="image-caption">
-            <p>{img.caption}</p>
-          </div>
-        </div>
-      ))
-    }
-
-    {
-      duo.length > 0 && (
-        <div class="duo">
-          {duo.map((img) => (
-            <div class="duo-item">
-              <Image src={img.src} alt={img.alt} width={900} height={675} loading="lazy" />
-            </div>
-          ))}
-        </div>
-      )
-    }
-
-    {
-      gallery.length > 0 && (
-        <div class="gallery">
-          {gallery.map((img) => (
-            <div class="gallery-item">
-              <Image src={img.src} alt={img.alt} width={900} height={675} loading="lazy" />
-            </div>
-          ))}
-        </div>
-      )
-    }
-
-    <div class="cta section">
+    <div class="cta">
       <p>¿Tienes un espacio que te gustaría transformar así?</p>
       <a href="/#contacto" class="btn-solid">Cuéntame tu proyecto ↗</a>
     </div>
@@ -92,135 +100,146 @@ const gallery = rest.slice(duoCount);
 
 <style>
   .project-header {
-    padding-top: clamp(140px, 20vh, 200px);
-    padding-bottom: clamp(40px, 6vh, 64px);
+    padding: clamp(140px, 20vh, 200px) clamp(20px, 4vw, 56px) clamp(32px, 5vh, 48px);
   }
-  .project-header .eyebrow {
-    margin-bottom: 16px;
+  .header-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(28px, 5vw, 64px);
   }
-  .project-header h1 {
-    font-size: clamp(2.8rem, 8vw, 6.5rem);
-    line-height: 0.94;
+  .header-left .eyebrow {
+    margin-bottom: 18px;
+  }
+  .header-left h1 {
+    font-size: clamp(2.8rem, 7vw, 6.5rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
   }
   .subtitle {
-    margin-top: 16px;
-    font-size: clamp(16px, 1.6vw, 20px);
+    font-size: clamp(16px, 1.4vw, 20px);
     color: var(--muted-3);
-    max-width: 50ch;
+    max-width: 40ch;
   }
-
-  /* Intro + captions share the same centered-column treatment */
-  .project-intro,
-  .image-caption {
+  .header-right {
     display: flex;
-    justify-content: center;
-    padding: clamp(28px, 4vh, 44px) clamp(20px, 4vw, 56px);
-    border-bottom: 1px solid var(--line);
+    align-items: flex-end;
   }
-  .project-intro p,
-  .image-caption p {
-    font-size: clamp(17px, 1.5vw, 20px);
-    line-height: 1.75;
+  .intro-text {
+    font-size: clamp(16px, 1.2vw, 18px);
+    line-height: 1.7;
     color: var(--body-copy);
-    max-width: 60ch;
-    text-align: left;
+    max-width: 56ch;
   }
 
-  .image-section {
-    padding-bottom: clamp(40px, 6vh, 64px);
+  .project-content {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 56px) clamp(70px, 10vh, 120px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(56px, 8vh, 96px);
   }
-  .image-full {
-    margin: 0 clamp(20px, 4vw, 56px);
-    aspect-ratio: 3 / 2;
+  .divider {
+    border-top: 1px solid var(--line);
+  }
+
+  /* Alternating image/text rows */
+  .content-row {
+    display: flex;
+    align-items: center;
+    gap: clamp(28px, 5vw, 64px);
+  }
+  .content-row.rev {
+    flex-direction: row-reverse;
+  }
+  .row-img,
+  .row-text {
+    flex: 1;
+    min-width: 0;
+  }
+  .row-img {
+    aspect-ratio: 4 / 3;
     overflow: hidden;
-    border-radius: 18px;
-    box-shadow: 0 6px 40px rgba(0, 0, 0, 0.1);
   }
-  .image-full :global(img) {
+  .row-img :global(img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.9s var(--ease);
+    transition: transform 1s var(--ease);
   }
-  .image-full:hover :global(img) {
-    transform: scale(1.03);
+  .row-img:hover :global(img) {
+    transform: scale(1.035);
+  }
+  .row-text p {
+    font-size: clamp(16px, 1.3vw, 18px);
+    line-height: 1.7;
+    color: var(--body-copy);
   }
 
-  .duo {
-    display: flex;
-    gap: 4px;
-    margin: 0 clamp(20px, 4vw, 56px) clamp(40px, 6vh, 64px);
+  /* Pairs of uncaptioned images, side by side */
+  .pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(16px, 2.5vw, 32px);
   }
-  .duo-item {
-    flex: 1;
+  .pair-img {
     aspect-ratio: 4 / 3;
     overflow: hidden;
-    border-radius: 18px;
   }
-  .duo-item :global(img) {
+  .pair-img :global(img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.8s var(--ease);
   }
-  .duo-item:hover :global(img) {
+  .pair-img:hover :global(img) {
     transform: scale(1.04);
   }
 
-  .gallery {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4px;
-    margin: 0 clamp(20px, 4vw, 56px) clamp(60px, 9vh, 100px);
-  }
-  .gallery-item {
-    aspect-ratio: 4 / 3;
+  .lone {
+    aspect-ratio: 16 / 9;
     overflow: hidden;
-    border-radius: 18px;
   }
-  .gallery-item :global(img) {
+  .lone :global(img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s ease;
-  }
-  .gallery-item:hover :global(img) {
-    transform: scale(1.04);
-  }
-  /* a lone last item in an odd-count gallery spans the full row */
-  .gallery-item:last-child:nth-child(odd) {
-    grid-column: span 2;
-    aspect-ratio: 21 / 9;
   }
 
-  @media (max-width: 640px) {
-    .duo {
-      flex-direction: column;
-    }
-    .gallery {
+  @media (max-width: 720px) {
+    .header-grid {
       grid-template-columns: 1fr;
     }
-    .gallery-item:last-child:nth-child(odd) {
-      grid-column: span 1;
-      aspect-ratio: 4 / 3;
+    .header-right {
+      align-items: flex-start;
+    }
+    .content-row,
+    .content-row.rev {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .pair {
+      grid-template-columns: 1fr;
     }
   }
 
   .cta {
-    padding-top: clamp(40px, 6vh, 64px);
-    padding-bottom: clamp(60px, 9vh, 100px);
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: clamp(56px, 8vh, 96px) clamp(20px, 4vw, 56px) clamp(80px, 12vh, 140px);
     border-top: 1px solid var(--line);
+    text-align: center;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    gap: 22px;
   }
   .cta p {
-    font-size: clamp(1.4rem, 2.4vw, 2rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    max-width: 30ch;
+    font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    max-width: 32ch;
   }
   .btn-solid {
     display: inline-flex;
@@ -228,7 +247,7 @@ const gallery = rest.slice(duoCount);
     gap: 10px;
     background: var(--ink);
     color: #fff;
-    padding: 18px 30px;
+    padding: 15px 26px;
     border-radius: 100px;
     font-size: 15px;
     font-weight: 700;
