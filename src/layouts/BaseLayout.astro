@@ -10,9 +10,10 @@ interface Props {
   ogImage?: string;
   jsonLd?: Record<string, unknown>;
   noindex?: boolean;
+  darkHero?: boolean;
 }
 
-const { title, description, ogImage, jsonLd, noindex = false } = Astro.props;
+const { title, description, ogImage, jsonLd, noindex = false, darkHero = false } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const defaultOgImage = new URL('/og-image.jpg', Astro.site);
 ---
@@ -41,7 +42,7 @@ const defaultOgImage = new URL('/og-image.jpg', Astro.site);
   </head>
   <body>
     <div id="scroll-bar" class="scroll-bar"></div>
-    <Header />
+    <Header darkHero={darkHero} />
     <main id="top">
       <slot />
     </main>
@@ -62,12 +63,17 @@ const defaultOgImage = new URL('/og-image.jpg', Astro.site);
 
       const bar = document.getElementById('scroll-bar');
       const header = document.querySelector('header[data-site-header]') as HTMLElement | null;
+      const hasDarkHero = header?.dataset.darkHero === 'true';
       const onScroll = () => {
         const y = Math.max(0, window.scrollY);
         const max = document.body.scrollHeight - window.innerHeight;
         if (bar) bar.style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
-        const solid = y > window.innerHeight * 0.7;
-        header?.classList.toggle('is-solid', solid);
+        // Only a dark hero needs the header to start transparent; every other
+        // page starts on a light background, so the header stays solid.
+        if (hasDarkHero) {
+          const solid = y > window.innerHeight * 0.7;
+          header?.classList.toggle('is-solid', solid);
+        }
       };
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();

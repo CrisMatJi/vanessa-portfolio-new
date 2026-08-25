@@ -2,10 +2,15 @@
 import { Image } from 'astro:assets';
 import iconWhite from '../assets/images/icon-white.png';
 import iconBlack from '../assets/images/icon-black.png';
+
+interface Props {
+  darkHero?: boolean;
+}
+const { darkHero = false } = Astro.props;
 ---
 
-<header data-site-header class="header">
-  <a href="#top" aria-label="Suárez Studio — inicio" class="logo">
+<header data-site-header data-dark-hero={darkHero} class:list={['header', { 'is-solid': !darkHero }]}>
+  <a href="/#top" aria-label="Suárez Studio — inicio" class="logo">
     <Image
       src={iconWhite}
       alt="Suárez Studio, interiorismo arquitectónico en Cádiz"
@@ -22,11 +27,11 @@ import iconBlack from '../assets/images/icon-black.png';
     />
   </a>
   <nav class="nav">
-    <a href="#servicios">Servicios</a>
-    <a href="#proyectos">Proyectos</a>
-    <a href="#proceso">Proceso</a>
-    <a href="#estudio">Estudio</a>
-    <a href="#contacto" class="nav-cta">Contacto</a>
+    <a href="/#servicios">Servicios</a>
+    <a href="/#proyectos">Proyectos</a>
+    <a href="/#proceso">Proceso</a>
+    <a href="/#estudio">Estudio</a>
+    <a href="/#contacto" class="nav-cta">Contacto</a>
   </nav>
 </header>
 
