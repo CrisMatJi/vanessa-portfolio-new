@@ -22,101 +22,193 @@ const jsonLd = {
   creator: { '@type': 'Person', name: 'Vanessa Suárez' },
   about: project.subtitle,
 };
+
+// Editorial layout, ported from the previous site: images with a caption come
+// first (full-width, caption centered below), then any remaining images run
+// as a side-by-side duo, then the rest fall into a standard grid gallery.
+const captionedCount = project.images.filter((img) => img.caption).length;
+const captioned = project.images.slice(0, captionedCount);
+const rest = project.images.slice(captionedCount);
+const duoCount = rest.length >= 2 ? 2 : 0;
+const duo = rest.slice(0, duoCount);
+const gallery = rest.slice(duoCount);
 ---
 
 <BaseLayout title={title} description={description} jsonLd={jsonLd}>
   <article class="project">
-    <header class="project-hero">
-      <Image src={project.cover} alt={project.coverAlt} width={1800} height={1000} priority />
-      <div class="project-hero-content">
-        <p class="eyebrow">{project.category}</p>
-        <h1>{project.title}</h1>
-        <p class="subtitle">{project.subtitle}</p>
-      </div>
+    <header class="project-header section">
+      <p class="eyebrow">{project.category}</p>
+      <h1>{project.title}</h1>
+      <p class="subtitle">{project.subtitle}</p>
     </header>
 
-    <div class="project-body section">
-      <p class="description">{project.description}</p>
+    <div class="project-intro">
+      <p>{project.description}</p>
+    </div>
 
-      <div class="gallery">
-        {
-          project.images.map((img) => (
-            <figure class="gallery-item">
-              <Image src={img.src} alt={img.alt} width={1400} height={933} />
-              {img.caption && <figcaption>{img.caption}</figcaption>}
-            </figure>
-          ))
-        }
-      </div>
+    {
+      captioned.map((img, i) => (
+        <div class="image-section">
+          <div class="image-full">
+            <Image src={img.src} alt={img.alt} width={1600} height={1067} loading={i === 0 ? 'eager' : 'lazy'} />
+          </div>
+          <div class="image-caption">
+            <p>{img.caption}</p>
+          </div>
+        </div>
+      ))
+    }
 
-      <div class="cta">
-        <p>¿Tienes un espacio que te gustaría transformar así?</p>
-        <a href="/#contacto" class="btn-solid">Cuéntame tu proyecto ↗</a>
-      </div>
+    {
+      duo.length > 0 && (
+        <div class="duo">
+          {duo.map((img) => (
+            <div class="duo-item">
+              <Image src={img.src} alt={img.alt} width={900} height={675} loading="lazy" />
+            </div>
+          ))}
+        </div>
+      )
+    }
+
+    {
+      gallery.length > 0 && (
+        <div class="gallery">
+          {gallery.map((img) => (
+            <div class="gallery-item">
+              <Image src={img.src} alt={img.alt} width={900} height={675} loading="lazy" />
+            </div>
+          ))}
+        </div>
+      )
+    }
+
+    <div class="cta section">
+      <p>¿Tienes un espacio que te gustaría transformar así?</p>
+      <a href="/#contacto" class="btn-solid">Cuéntame tu proyecto ↗</a>
     </div>
   </article>
 </BaseLayout>
 
 <style>
-  .project-hero {
-    position: relative;
-    color: #fff;
+  .project-header {
+    padding-top: clamp(140px, 20vh, 200px);
+    padding-bottom: clamp(40px, 6vh, 64px);
   }
-  .project-hero :global(img) {
-    width: 100%;
-    height: clamp(360px, 70vh, 720px);
-    object-fit: cover;
+  .project-header .eyebrow {
+    margin-bottom: 16px;
   }
-  .project-hero-content {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: clamp(20px, 4vw, 56px) clamp(20px, 4vw, 56px) clamp(32px, 5vh, 64px);
-    background: linear-gradient(180deg, rgba(10, 10, 10, 0) 40%, rgba(10, 10, 10, 0.75) 100%);
-  }
-  .project-hero-content .eyebrow {
-    color: rgba(255, 255, 255, 0.75);
-  }
-  .project-hero-content h1 {
-    font-size: clamp(2.6rem, 8vw, 6rem);
-    line-height: 0.96;
-    margin-top: 10px;
+  .project-header h1 {
+    font-size: clamp(2.8rem, 8vw, 6.5rem);
+    line-height: 0.94;
   }
   .subtitle {
-    margin-top: 12px;
+    margin-top: 16px;
     font-size: clamp(16px, 1.6vw, 20px);
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--muted-3);
     max-width: 50ch;
   }
-  .description {
-    font-size: clamp(17px, 1.8vw, 22px);
-    line-height: 1.65;
-    color: var(--body-copy);
-    max-width: 72ch;
-    margin-bottom: clamp(48px, 7vh, 88px);
-  }
-  .gallery {
+
+  /* Intro + captions share the same centered-column treatment */
+  .project-intro,
+  .image-caption {
     display: flex;
-    flex-direction: column;
-    gap: clamp(40px, 6vh, 72px);
+    justify-content: center;
+    padding: clamp(28px, 4vh, 44px) clamp(20px, 4vw, 56px);
+    border-bottom: 1px solid var(--line);
+  }
+  .project-intro p,
+  .image-caption p {
+    font-size: clamp(17px, 1.5vw, 20px);
+    line-height: 1.75;
+    color: var(--body-copy);
+    max-width: 60ch;
+    text-align: left;
+  }
+
+  .image-section {
+    padding-bottom: clamp(40px, 6vh, 64px);
+  }
+  .image-full {
+    margin: 0 clamp(20px, 4vw, 56px);
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: 0 6px 40px rgba(0, 0, 0, 0.1);
+  }
+  .image-full :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.9s var(--ease);
+  }
+  .image-full:hover :global(img) {
+    transform: scale(1.03);
+  }
+
+  .duo {
+    display: flex;
+    gap: 4px;
+    margin: 0 clamp(20px, 4vw, 56px) clamp(40px, 6vh, 64px);
+  }
+  .duo-item {
+    flex: 1;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 18px;
+  }
+  .duo-item :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s var(--ease);
+  }
+  .duo-item:hover :global(img) {
+    transform: scale(1.04);
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin: 0 clamp(20px, 4vw, 56px) clamp(60px, 9vh, 100px);
+  }
+  .gallery-item {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 18px;
   }
   .gallery-item :global(img) {
     width: 100%;
-    height: auto;
-    border-radius: 18px;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
   }
-  .gallery-item figcaption {
-    margin-top: 16px;
-    font-size: 15px;
-    line-height: 1.6;
-    color: var(--muted-3);
-    max-width: 60ch;
+  .gallery-item:hover :global(img) {
+    transform: scale(1.04);
   }
+  /* a lone last item in an odd-count gallery spans the full row */
+  .gallery-item:last-child:nth-child(odd) {
+    grid-column: span 2;
+    aspect-ratio: 21 / 9;
+  }
+
+  @media (max-width: 640px) {
+    .duo {
+      flex-direction: column;
+    }
+    .gallery {
+      grid-template-columns: 1fr;
+    }
+    .gallery-item:last-child:nth-child(odd) {
+      grid-column: span 1;
+      aspect-ratio: 4 / 3;
+    }
+  }
+
   .cta {
-    margin-top: clamp(60px, 9vh, 100px);
     padding-top: clamp(40px, 6vh, 64px);
+    padding-bottom: clamp(60px, 9vh, 100px);
     border-top: 1px solid var(--line);
     display: flex;
     flex-wrap: wrap;

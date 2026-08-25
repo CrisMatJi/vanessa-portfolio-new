@@ -2,9 +2,8 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import WhatsAppButton from '../components/WhatsAppButton.astro';
-// ProjectCard/projects: solo se usan en la sección "Proyectos", desactivada por ahora (ver más abajo).
-// import ProjectCard from '../components/ProjectCard.astro';
-// import { projects } from '../data/projects';
+import ProjectCard from '../components/ProjectCard.astro';
+import { projects } from '../data/projects';
 
 import heroImage from '../assets/images/hero-interior.png';
 import vanessaPortrait from '../assets/images/vanessa.jpeg';
@@ -143,25 +142,19 @@ const servicios = [
     </div>
   </section>
 
-  {
-    /*
-    Proyectos — oculto a petición del cliente hasta decidir qué hacer con la
-    galería de CEA/Ajibe. El bloque se deja listo para reactivar.
-
-    <section id="proyectos" class="section proyectos">
-      <div class="section-head">
-        <h2 class="h-xl">
-          <span class="reveal-line"><span data-reveal>Proyectos</span></span>
-          <span class="reveal-line"><span data-reveal class="dim">realizados</span></span>
-        </h2>
-        <p class="eyebrow">02 — Proyectos</p>
-      </div>
-      <div class="proyectos-grid">
-        {projects.map((project, i) => <ProjectCard project={project} index={i} />)}
-      </div>
-    </section>
-    */
-  }
+  <!-- Proyectos -->
+  <section id="proyectos" class="section proyectos">
+    <div class="section-head">
+      <h2 class="h-xl">
+        <span class="reveal-line"><span data-reveal>Proyectos</span></span>
+        <span class="reveal-line"><span data-reveal class="dim">realizados</span></span>
+      </h2>
+      <p class="eyebrow">02 — Proyectos</p>
+    </div>
+    <div class="proyectos-grid">
+      {projects.map((project, i) => <ProjectCard project={project} index={i} />)}
+    </div>
+  </section>
 
   <!-- Proceso -->
   <section id="proceso" class="proceso">
