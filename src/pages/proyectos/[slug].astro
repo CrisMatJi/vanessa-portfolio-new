@@ -37,10 +37,16 @@ for (let i = 0; i < rest.length; i += 2) {
   if (i + 1 < rest.length) pairs.push([rest[i], rest[i + 1]]);
   else lone = rest[i];
 }
+
+const currentIndex = projects.findIndex((p) => p.slug === project.slug);
+const nextProject = projects[(currentIndex + 1) % projects.length];
 ---
 
 <BaseLayout title={title} description={description} jsonLd={jsonLd}>
   <article class="project">
+    <div class="back-link-wrap">
+      <a href="/#proyectos" class="back-link">← Volver a proyectos</a>
+    </div>
     <header class="project-header">
       <div class="header-grid">
         <div class="header-left">
@@ -95,12 +101,39 @@ for (let i = 0; i < rest.length; i += 2) {
       <p>¿Tienes un espacio que te gustaría transformar así?</p>
       <a href="/#contacto" class="btn-solid">Cuéntame tu proyecto ↗</a>
     </div>
+
+    <a href={`/proyectos/${nextProject.slug}/`} class="next-project">
+      <span class="next-label">Siguiente proyecto</span>
+      <span class="next-row">
+        <span class="next-title">{nextProject.title}</span>
+        <span class="next-arrow">→</span>
+      </span>
+    </a>
   </article>
 </BaseLayout>
 
 <style>
+  .back-link-wrap {
+    padding: clamp(120px, 18vh, 180px) clamp(20px, 4vw, 56px) 0;
+  }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted-3);
+    transition:
+      color 0.2s ease,
+      gap 0.2s ease;
+  }
+  .back-link:hover {
+    color: var(--ink);
+    gap: 12px;
+  }
+
   .project-header {
-    padding: clamp(140px, 20vh, 200px) clamp(20px, 4vw, 56px) clamp(32px, 5vh, 48px);
+    padding: clamp(20px, 3vh, 32px) clamp(20px, 4vw, 56px) clamp(32px, 5vh, 48px);
   }
   .header-grid {
     display: grid;
@@ -255,5 +288,47 @@ for (let i = 0; i < rest.length; i += 2) {
   }
   .btn-solid:hover {
     opacity: 0.82;
+  }
+
+  .next-project {
+    display: block;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: clamp(28px, 4vh, 44px) clamp(20px, 4vw, 56px) clamp(56px, 9vh, 96px);
+    border-top: 1px solid var(--line);
+  }
+  .next-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .next-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .next-title {
+    font-size: clamp(2.2rem, 7vw, 5.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    transition: opacity 0.3s ease;
+  }
+  .next-arrow {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    color: var(--muted-3);
+    flex: none;
+    transition: transform 0.3s var(--ease);
+  }
+  .next-project:hover .next-title {
+    opacity: 0.72;
+  }
+  .next-project:hover .next-arrow {
+    transform: translateX(10px);
   }
 </style>
