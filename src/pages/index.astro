@@ -164,7 +164,7 @@ const servicios = [
   <section id="proceso" class="proceso">
     <div class="section-head dark">
       <h2 class="h-xl">
-        <span class="reveal-line"><span data-reveal>Cuatro fases,</span></span>
+        <span class="reveal-line"><span data-reveal>Cinco fases,</span></span>
         <span class="reveal-line"><span data-reveal class="dim-light">cero sorpresas</span></span>
       </h2>
       <p class="proceso-lede">
@@ -176,16 +176,11 @@ const servicios = [
       <article class="proceso-card fase-1">
         <div>
           <span class="fase-tag">FASE 01</span>
-          <h3>Hablamos</h3>
+          <h3>Nos conocemos</h3>
         </div>
         <div>
           <p class="fase-copy">
-            Me cuentas la casa, cómo la usáis y qué presupuesto manejas. Sin formularios eternos: una conversación
-            por WhatsApp o una llamada corta.
-          </p>
-          <p class="fase-copy-sub">
-            Si veo que no soy la persona adecuada para tu proyecto, te lo digo ahí mismo y te oriento hacia quien sí
-            lo es.
+            Primera conversación, dossier informativo, visita, medición y estudio de necesidades.
           </p>
         </div>
       </article>
@@ -193,47 +188,41 @@ const servicios = [
       <article class="proceso-card fase-2">
         <div>
           <span class="fase-tag">FASE 02</span>
-          <h3>Propuesta y presupuesto</h3>
+          <h3>Definimos el proyecto</h3>
         </div>
         <div>
-          <p class="fase-copy">
-            Concepto, distribución, alcance y una cifra cerrada. Sabes lo que incluye y lo que no antes de firmar
-            nada.
-          </p>
-          <p class="fase-copy-sub">
-            El calendario va dentro del presupuesto: fechas de entrega de proyecto, de inicio de obra y de entrega
-            final.
-          </p>
+          <p class="fase-copy">Alcance, propuesta de trabajo y presupuesto.</p>
         </div>
       </article>
 
       <article class="proceso-card fase-3">
         <div>
           <span class="fase-tag">FASE 03</span>
-          <h3>Proyecto, planos y renders</h3>
+          <h3>Diseñamos</h3>
         </div>
         <div>
-          <p class="fase-copy">
-            Aquí es donde se ajusta todo: en pantalla, no en obra. Ves tu casa terminada antes de tocar un tabique.
-          </p>
-          <p class="fase-copy-sub">
-            Planimetría completa, memoria de calidades y renders. Cuando te gusta lo que ves, empezamos.
-          </p>
+          <p class="fase-copy">Concepto, distribución, materiales y propuestas de diseño.</p>
         </div>
       </article>
 
       <article class="proceso-card fase-4">
         <div>
           <span class="fase-tag">FASE 04</span>
-          <h3>Obra y entrega</h3>
+          <h3>Perfeccionamos</h3>
+        </div>
+        <div>
+          <p class="fase-copy">Presentación del proyecto y rondas de ajustes.</p>
+        </div>
+      </article>
+
+      <article class="proceso-card fase-5">
+        <div>
+          <span class="fase-tag">FASE 05</span>
+          <h3>Lo hacemos realidad</h3>
         </div>
         <div>
           <p class="fase-copy">
-            Seguimiento en obra, control de calidades y entrega con la casa vestida y lista para vivir.
-          </p>
-          <p class="fase-copy-sub">
-            En proyectos online, el seguimiento es por vídeo con tu constructor, con la misma frecuencia y los
-            mismos informes.
+            Proyecto final, documentación y, si lo deseas, acompañamiento en obra.
           </p>
         </div>
       </article>
@@ -784,6 +773,12 @@ const servicios = [
     color: #fff;
     top: 168px;
   }
+  .fase-5 {
+    background: var(--ink);
+    color: #fff;
+    border: 1px solid #333;
+    top: 188px;
+  }
   .fase-tag {
     font-size: 13px;
     font-weight: 700;
@@ -795,7 +790,8 @@ const servicios = [
   .fase-2 .fase-tag {
     color: var(--muted-4);
   }
-  .fase-3 .fase-tag {
+  .fase-3 .fase-tag,
+  .fase-5 .fase-tag {
     color: #b0b0b0;
   }
   .fase-4 .fase-tag {
@@ -808,7 +804,6 @@ const servicios = [
   .fase-copy {
     font-size: clamp(16px, 1.4vw, 19px);
     line-height: 1.6;
-    margin-bottom: 16px;
   }
   .fase-1 .fase-copy {
     color: #3a3a3a;
@@ -816,25 +811,12 @@ const servicios = [
   .fase-2 .fase-copy {
     color: #3a3a3a;
   }
-  .fase-3 .fase-copy {
+  .fase-3 .fase-copy,
+  .fase-5 .fase-copy {
     color: #d6d6d6;
   }
   .fase-4 .fase-copy {
     color: rgba(255, 255, 255, 0.95);
-  }
-  .fase-copy-sub {
-    font-size: 15px;
-    line-height: 1.6;
-  }
-  .fase-1 .fase-copy-sub,
-  .fase-2 .fase-copy-sub {
-    color: #7a7a7a;
-  }
-  .fase-3 .fase-copy-sub {
-    color: var(--muted);
-  }
-  .fase-4 .fase-copy-sub {
-    color: rgba(255, 255, 255, 0.78);
   }
 
   /* Estudio */
