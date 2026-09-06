@@ -1,0 +1,982 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WhatsAppButton from '../WhatsAppButton.astro';
+import ProjectCard from '../ProjectCard.astro';
+import { projects } from '../../data/projects';
+import { useTranslations, localizePath } from '../../i18n/utils';
+import { getLocalizedProjects } from '../../i18n/projects';
+
+import heroImage from '../../assets/images/hero-interior.png';
+import vanessaPortrait from '../../assets/images/vanessa.jpeg';
+
+const lang = Astro.currentLocale ?? 'es';
+const t = useTranslations(lang);
+const localizedProjects = getLocalizedProjects(projects, lang);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: t.jsonld.name,
+  description: t.jsonld.description,
+  url: 'https://www.suarezstudio.es/',
+  telephone: '+34611444163',
+  areaServed: t.jsonld.areaServed,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Cádiz',
+    addressRegion: t.jsonld.addressRegion,
+    addressCountry: 'ES',
+  },
+  founder: {
+    '@type': 'Person',
+    name: 'Vanessa Suárez',
+    jobTitle: t.jsonld.founderJobTitle,
+  },
+  sameAs: [
+    'https://www.instagram.com/vanessa_suarez_interiorismo/',
+    'https://www.linkedin.com/in/vanessa-calvente-suarez-932b14371/',
+  ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: t.footer.servicesTitle,
+    itemListElement: [
+      t.catalog.integral,
+      t.catalog.llaveEnMano,
+      t.catalog.seguimiento,
+      t.catalog.renders,
+      t.catalog.planimetria,
+      t.catalog.asesorias,
+    ].map((name) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name } })),
+  },
+};
+
+const servicios = t.services.list;
+---
+
+<BaseLayout title={t.meta.home.title} description={t.meta.home.description} jsonLd={jsonLd} darkHero>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg">
+      <Image src={heroImage} alt="Salón interior con luz cálida, interiorismo Suárez Studio" width={1800} height={1200} priority />
+    </div>
+    <div class="hero-scrim"></div>
+    <div class="hero-content">
+      <div class="hero-top">
+        <div class="hero-lede">
+          <p data-reveal>
+            {t.hero.lede}
+          </p>
+          <div data-reveal class="hero-ctas">
+            <a href="#contacto" class="btn-solid">{t.hero.ctaPrimary}</a>
+            <a href="#servicios" class="btn-outline">{t.hero.ctaSecondary}</a>
+          </div>
+        </div>
+        <p data-reveal class="eyebrow hero-eyebrow">{t.hero.eyebrow}</p>
+      </div>
+      <h1 class="hero-title">
+        <span class="reveal-line"><span data-reveal>Suárez Studio<span class="reg">®</span></span></span>
+      </h1>
+    </div>
+  </section>
+
+  <!-- Marquee band -->
+  <section class="band">
+    <div class="band-track">
+      <span class="band-text">{t.band.marquee}</span>
+      <span class="band-text" aria-hidden="true">{t.band.marquee}</span>
+    </div>
+    <div class="band-grid">
+      {
+        t.band.items.map((item) => (
+          <div data-reveal class="band-item">
+            <p class="band-title">{item.title}</p>
+            <p class="band-copy">{item.copy}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Servicios -->
+  <section id="servicios" class="section">
+    <div class="section-head">
+      <h2 class="h-xl">
+        <span class="reveal-line"><span data-reveal>{t.services.titleLine1}</span></span>
+        <span class="reveal-line"><span data-reveal class="dim">{t.services.titleLine2}</span></span>
+      </h2>
+      <p class="eyebrow">{t.services.eyebrow}</p>
+    </div>
+    <div class="services-grid">
+      {
+        servicios.map((s, i) => (
+          <article data-reveal class="service-card" style={`transition-delay:${(i % 4) * 0.07}s`}>
+            <span class="service-num">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{s}</h3>
+            <a href="#contacto" class="link">
+              {t.services.cta}
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Proyectos -->
+  <section id="proyectos" class="section proyectos">
+    <div class="section-head">
+      <h2 class="h-xl">
+        <span class="reveal-line"><span data-reveal>{t.projectsSection.titleLine1}</span></span>
+        <span class="reveal-line"><span data-reveal class="dim">{t.projectsSection.titleLine2}</span></span>
+      </h2>
+      <p class="eyebrow">{t.projectsSection.eyebrow}</p>
+    </div>
+    <div class="proyectos-grid">
+      {localizedProjects.map((project, i) => <ProjectCard project={project} index={i} />)}
+    </div>
+  </section>
+
+  <!-- Proceso -->
+  <section id="proceso" class="proceso">
+    <div class="section-head dark">
+      <h2 class="h-xl">
+        <span class="reveal-line"><span data-reveal>{t.process.titleLine1}</span></span>
+        <span class="reveal-line"><span data-reveal class="dim-light">{t.process.titleLine2}</span></span>
+      </h2>
+      <p class="proceso-lede">
+        {t.process.lede}
+      </p>
+    </div>
+    <div class="proceso-list">
+      {
+        t.process.phases.map((phase, i) => (
+          <article class:list={['proceso-card', `fase-${i + 1}`]}>
+            <div>
+              <span class="fase-tag">{phase.tag}</span>
+              <h3>{phase.title}</h3>
+            </div>
+            <div>
+              <p class="fase-copy">{phase.copy}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Estudio / Sobre mí -->
+  <section id="estudio" class="section estudio">
+    <div class="estudio-grid">
+      <div data-reveal class="estudio-photo">
+        <Image src={vanessaPortrait} alt="Retrato de Vanessa Suárez, interiorista" width={900} height={1200} />
+      </div>
+      <div class="estudio-copy">
+        <p class="eyebrow">{t.about.eyebrow}</p>
+        <h2 class="h-lg">
+          <span class="reveal-line"><span data-reveal>{t.about.titleLine1}</span></span>
+          <span class="reveal-line"><span data-reveal class="dim">{t.about.titleLine2}</span></span>
+        </h2>
+        {t.about.paragraphs.map((p) => <p class="body-copy">{p}</p>)}
+        <div class="estudio-stats">
+          {
+            t.about.stats.map((stat) => (
+              <div>
+                <p class="stat">{stat.value}</p>
+                <p class="stat-label">{stat.label}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section">
+    <div class="faq-grid">
+      <div>
+        <p class="eyebrow" style="margin-bottom:20px">{t.faq.eyebrow}</p>
+        <h2 class="h-lg">
+          <span class="reveal-line"><span data-reveal>{t.faq.title}</span></span>
+        </h2>
+      </div>
+      <div class="faq-list">
+        {
+          t.faq.items.map((item) => (
+            <details class="faq-item">
+              <summary>{item.q}</summary>
+              <p>{item.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Contacto -->
+  <section id="contacto" class="contacto">
+    <h2 class="h-xxl">
+      <span class="reveal-line"><span data-reveal>{t.contact.titleLine1}</span></span>
+      <span class="reveal-line"><span data-reveal class="dim-light">{t.contact.titleLine2}</span></span>
+    </h2>
+    <div class="contacto-grid">
+      <div class="contacto-left">
+        <p class="contacto-lede">{t.contact.lede}</p>
+        <WhatsAppButton />
+        <div class="contacto-info">
+          <a href="mailto:vanessa.cal.sua@gmail.com">vanessa.cal.sua@gmail.com</a>
+          <a href="tel:+34611444163">+34 611 44 41 63</a>
+          <p>{t.contact.info}</p>
+        </div>
+      </div>
+
+      <div class="contacto-right">
+        <p id="form-status-sent" class="form-sent" hidden>
+          <span class="form-sent-title">{t.contact.sentTitle}</span>
+          <span>{t.contact.sentBody}</span>
+        </p>
+        <form id="contact-form" class="form">
+          <p class="eyebrow">{t.contact.formEyebrow}</p>
+          <div class="form-row">
+            <label>{t.contact.labelName}<input name="from_name" type="text" required placeholder={t.contact.placeholderName} /></label>
+            <label>{t.contact.labelEmail}<input name="reply_to" type="email" required placeholder="tu@email.com" /></label>
+          </div>
+          <div class="form-row">
+            <label>{t.contact.labelPhone}<input name="telefono" type="tel" placeholder={t.contact.placeholderPhone} /></label>
+            <label>{t.contact.labelLocation}<input name="localidad" type="text" placeholder={t.contact.placeholderLocation} /></label>
+          </div>
+          <div class="form-row">
+            <label>
+              {t.contact.labelService}
+              <select name="servicio">
+                <option>{t.catalog.integral}</option>
+                <option>{t.catalog.llaveEnMano}</option>
+                <option>{t.catalog.seguimiento}</option>
+                <option>{t.catalog.renders}</option>
+                <option>{t.catalog.planimetria}</option>
+                <option>{t.catalog.asesorias}</option>
+              </select>
+            </label>
+            <label>
+              {t.contact.labelProfile}
+              <select name="perfil">
+                {t.contact.profileOptions.map((option) => <option>{option}</option>)}
+              </select>
+            </label>
+          </div>
+          <label>{t.contact.labelMessage}<textarea name="mensaje_extra" rows="4" placeholder={t.contact.placeholderMessage}
+            ></textarea></label>
+          <input type="hidden" name="subject" value="Nueva consulta desde suarezstudio.es" />
+          <input type="hidden" name="message" />
+          <label class="form-checkbox">
+            <input type="checkbox" required />
+            <span>{t.contact.privacyPrefix} <a href={localizePath('/privacidad', lang)}>{t.contact.privacyLink}</a>{t.contact.privacySuffix}</span>
+          </label>
+          <button type="submit" class="btn-solid form-submit">{t.contact.submit}</button>
+          <p id="form-status-error" class="form-error" hidden>{t.contact.error}</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Zonas -->
+  <section id="zonas" class="section zonas">
+    <h2 class="h-md">
+      <span class="reveal-line"><span data-reveal>{t.areas.title}</span></span>
+    </h2>
+    <p class="zonas-lede">
+      {t.areas.lede}
+    </p>
+    <div class="zonas-grid">
+      <div>
+        <h3 class="zonas-title">{t.areas.cadiz.title}</h3>
+        <p class="zonas-copy">
+          {t.areas.cadiz.copy}
+        </p>
+      </div>
+      <div>
+        <h3 class="zonas-title">{t.areas.andalucia.title}</h3>
+        <p class="zonas-copy">{t.areas.andalucia.copy}</p>
+      </div>
+      <div>
+        <h3 class="zonas-title">{t.areas.espana.title}</h3>
+        <p class="zonas-copy">
+          {t.areas.espana.copy}
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import emailjs from '@emailjs/browser';
+
+  const SERVICE_ID = 'service_fu6s5ou';
+  const TEMPLATE_ID = 'template_eezjrti';
+  const PUBLIC_KEY = '1JgEPD0mQL9idQIIo';
+
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const sent = document.getElementById('form-status-sent');
+  const errorMsg = document.getElementById('form-status-error');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const combined = [
+      `Teléfono: ${data.get('telefono') || '—'}`,
+      `Localidad: ${data.get('localidad') || '—'}`,
+      `Servicio: ${data.get('servicio')}`,
+      `Tipo de cliente: ${data.get('perfil')}`,
+      '',
+      String(data.get('mensaje_extra') || ''),
+    ].join('\n');
+    (form.elements.namedItem('message') as HTMLInputElement).value = combined;
+
+    const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    submitBtn.disabled = true;
+    errorMsg?.setAttribute('hidden', '');
+
+    try {
+      await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form, { publicKey: PUBLIC_KEY });
+      form.hidden = true;
+      sent?.removeAttribute('hidden');
+    } catch {
+      errorMsg?.removeAttribute('hidden');
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+
+<style>
+  /* Hero */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    background: var(--ink);
+    color: #fff;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: -6% 0;
+  }
+  .hero-bg :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(10, 10, 10, 0.55) 0%,
+      rgba(10, 10, 10, 0.15) 32%,
+      rgba(10, 10, 10, 0.72) 78%,
+      rgba(10, 10, 10, 0.9) 100%
+    );
+  }
+  .hero-content {
+    position: relative;
+    padding: 0 clamp(20px, 4vw, 56px) clamp(18px, 3vh, 34px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(28px, 5vh, 58px);
+  }
+  .hero-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 28px;
+  }
+  .hero-lede {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    max-width: 38ch;
+  }
+  .hero-lede p {
+    font-size: clamp(16px, 1.35vw, 20px);
+    line-height: 1.5;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.92);
+  }
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .btn-solid {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    color: var(--ink);
+    padding: 18px 30px;
+    border-radius: 100px;
+    font-size: 15px;
+    font-weight: 700;
+    transition: opacity 0.3s ease;
+    width: fit-content;
+  }
+  .btn-solid:hover {
+    opacity: 0.82;
+  }
+  .btn-outline {
+    display: flex;
+    align-items: center;
+    padding: 18px 30px;
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    border-radius: 100px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    transition:
+      background 0.3s ease,
+      color 0.3s ease,
+      border-color 0.3s ease;
+  }
+  .btn-outline:hover {
+    background: #fff;
+    color: var(--ink);
+    border-color: #fff;
+  }
+  .hero-eyebrow {
+    color: rgba(255, 255, 255, 0.62);
+  }
+  .hero-title {
+    font-size: clamp(2.6rem, 12vw, 15rem);
+    line-height: 0.92;
+    letter-spacing: -0.045em;
+    font-weight: 800;
+  }
+  .reg {
+    font-size: 0.34em;
+    vertical-align: top;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+  /* Band */
+  .band {
+    background: var(--ink);
+    color: #fff;
+    padding: clamp(56px, 9vh, 110px) 0 clamp(46px, 7vh, 86px);
+    overflow: hidden;
+  }
+  .band-track {
+    display: inline-flex;
+    white-space: nowrap;
+    animation: band-marquee 26s linear infinite;
+    will-change: transform;
+  }
+
+  .band-text {
+    font-size: clamp(2.6rem, 9.4vw, 11rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    font-weight: 800;
+    padding-left: clamp(20px, 4vw, 56px);
+  }
+
+  @keyframes band-marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .band-track {
+      animation: none;
+    }
+  }
+  .band-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 28px;
+    padding: clamp(40px, 6vh, 72px) clamp(20px, 4vw, 56px) 0;
+  }
+  .band-item {
+    border-top: 1px solid #333;
+    padding-top: 18px;
+  }
+  .band-title {
+    font-size: clamp(17px, 1.5vw, 20px);
+    font-weight: 700;
+  }
+  .band-copy {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 8px;
+    line-height: 1.55;
+  }
+
+  /* Shared section heads */
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 26px;
+    margin-bottom: clamp(40px, 6vh, 68px);
+  }
+  .h-xl {
+    font-size: clamp(2.4rem, 6.2vw, 6rem);
+    line-height: 0.98;
+    max-width: 16ch;
+  }
+  .h-lg {
+    font-size: clamp(2.2rem, 5vw, 4.6rem);
+    line-height: 1;
+  }
+  .h-md {
+    font-size: clamp(1.8rem, 3.4vw, 3.2rem);
+    line-height: 1.05;
+    margin-bottom: 26px;
+  }
+  .h-xxl {
+    font-size: clamp(2.6rem, 8vw, 9rem);
+    line-height: 0.96;
+    max-width: 15ch;
+    margin-bottom: clamp(40px, 6vh, 70px);
+  }
+  .dim {
+    color: var(--muted-4);
+  }
+  .dim-light {
+    color: #b0b0b0;
+  }
+
+  /* Servicios */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+
+  @media (max-width: 900px) {
+    .services-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .services-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .service-card {
+    background: var(--panel);
+    padding: clamp(24px, 3vw, 36px);
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 190px;
+    transition:
+      background 0.35s ease,
+      color 0.35s ease;
+  }
+  .service-card:hover {
+    background: var(--ink);
+    color: #fff;
+  }
+  .service-num {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--muted-4);
+  }
+  .service-card h3 {
+    font-size: clamp(1.3rem, 1.8vw, 1.7rem);
+    line-height: 1.1;
+  }
+  .service-card .link {
+    margin-top: auto;
+    font-size: 14px;
+    font-weight: 700;
+    border-bottom: 1.5px solid currentColor;
+    padding-bottom: 4px;
+    align-self: flex-start;
+  }
+
+  /* Proyectos */
+  .proyectos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: clamp(24px, 3vw, 44px);
+  }
+
+  /* Proceso */
+  .proceso {
+    background: var(--ink);
+    color: #fff;
+    padding: clamp(70px, 11vh, 130px) clamp(20px, 4vw, 56px) clamp(80px, 13vh, 150px);
+  }
+  .section-head.dark {
+    display: block;
+    border: 0;
+    padding: 0;
+    margin-bottom: clamp(36px, 6vh, 64px);
+  }
+  .proceso-lede {
+    max-width: 36ch;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--muted);
+    margin-top: 16px;
+  }
+  .proceso-list {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, 4vh, 40px);
+  }
+  .proceso-card {
+    position: sticky;
+    top: 108px;
+    border-radius: 22px;
+    padding: clamp(28px, 4vw, 58px);
+    min-height: clamp(300px, 46vh, 420px);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: clamp(20px, 3vw, 52px);
+    align-items: start;
+    box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.4);
+  }
+  .fase-1 {
+    background: #fff;
+    color: var(--ink);
+  }
+  .fase-2 {
+    background: var(--panel);
+    color: var(--ink);
+    top: 128px;
+  }
+  .fase-3 {
+    background: var(--ink);
+    color: #fff;
+    border: 1px solid #333;
+    top: 148px;
+  }
+  .fase-4 {
+    background: #2e2e2e;
+    color: #fff;
+    top: 168px;
+  }
+  .fase-5 {
+    background: var(--ink);
+    color: #fff;
+    border: 1px solid #333;
+    top: 188px;
+  }
+  .fase-tag {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    display: block;
+    margin-bottom: 16px;
+  }
+  .fase-1 .fase-tag,
+  .fase-2 .fase-tag {
+    color: var(--muted-4);
+  }
+  .fase-3 .fase-tag,
+  .fase-5 .fase-tag {
+    color: #b0b0b0;
+  }
+  .fase-4 .fase-tag {
+    color: rgba(255, 255, 255, 0.75);
+  }
+  .proceso-card h3 {
+    font-size: clamp(1.9rem, 3.4vw, 3.4rem);
+    line-height: 1;
+  }
+  .fase-copy {
+    font-size: clamp(16px, 1.4vw, 19px);
+    line-height: 1.6;
+  }
+  .fase-1 .fase-copy {
+    color: #3a3a3a;
+  }
+  .fase-2 .fase-copy {
+    color: #3a3a3a;
+  }
+  .fase-3 .fase-copy,
+  .fase-5 .fase-copy {
+    color: #d6d6d6;
+  }
+  .fase-4 .fase-copy {
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  /* Estudio */
+  .estudio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: clamp(36px, 5vw, 80px);
+    align-items: center;
+  }
+  .estudio-photo {
+    position: relative;
+    width: 100%;
+    height: clamp(340px, 62vh, 620px);
+    border-radius: 18px;
+    overflow: hidden;
+  }
+  .estudio-photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .estudio-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .body-copy {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--body-copy);
+    max-width: 52ch;
+  }
+  .estudio-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 22px;
+    border-top: 1px solid var(--line);
+    padding-top: 26px;
+    margin-top: 6px;
+  }
+  .stat {
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+  }
+  .stat-label {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  /* FAQ */
+  .faq-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .faq-item {
+    border-top: 1px solid var(--line);
+  }
+  .faq-item:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+  .faq-item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 24px 0;
+    font-size: clamp(16px, 1.5vw, 20px);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    list-style: none;
+  }
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-item summary::after {
+    content: '+';
+    font-size: 24px;
+    color: var(--muted);
+  }
+  .faq-item[open] summary::after {
+    content: '−';
+    color: var(--muted-4);
+  }
+  .faq-item p {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--body-copy);
+    max-width: 56ch;
+    padding-bottom: 26px;
+  }
+
+  /* Contacto */
+  .contacto {
+    background: var(--ink);
+    color: #fff;
+    padding: clamp(80px, 13vh, 150px) clamp(20px, 4vw, 56px);
+  }
+  .contacto-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: clamp(36px, 5vw, 80px);
+    align-items: start;
+  }
+  .contacto-left {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .contacto-lede {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--muted);
+    max-width: 42ch;
+  }
+  .contacto-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 16px;
+    color: var(--muted);
+    border-top: 1px solid #333;
+    padding-top: 22px;
+  }
+  .contacto-info a:hover {
+    color: #fff;
+  }
+  .form {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .form:not([hidden]) {
+    display: flex;
+  }
+  .form-sent {
+    flex-direction: column;
+    gap: 14px;
+    border: 1px solid #333;
+    border-radius: 18px;
+    padding: clamp(28px, 4vw, 48px);
+  }
+
+  .form-sent:not([hidden]) {
+    display: flex;
+  }
+  .form-sent-title {
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .form-sent span:last-child {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+  }
+  .form label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .form input,
+  .form select,
+  .form textarea {
+    background: none;
+    border: 0;
+    border-bottom: 1px solid #333;
+    padding: 11px 0;
+    color: #fff;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .form select {
+    background: var(--ink);
+  }
+  .form textarea {
+    resize: vertical;
+  }
+  .form .form-checkbox {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--muted);
+    text-transform: none;
+    letter-spacing: normal;
+    font-weight: 400;
+    margin-top: 4px;
+  }
+  .form-checkbox input {
+    margin-top: 3px;
+    accent-color: var(--muted-4);
+  }
+  .form-checkbox a {
+    text-decoration: underline;
+  }
+  .form-submit {
+    margin-top: 12px;
+    border: 0;
+    cursor: pointer;
+    align-self: flex-start;
+  }
+  .form-error {
+    font-size: 14px;
+    color: #ff8a80;
+  }
+
+  /* Zonas */
+  .zonas {
+    padding-top: clamp(60px, 9vh, 105px);
+    padding-bottom: 0;
+  }
+  .zonas-lede {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--muted-3);
+    max-width: 60ch;
+    margin-top: 14px;
+  }
+  .zonas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 28px;
+    border-top: 1px solid var(--line);
+    padding-top: 28px;
+  }
+  .zonas-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted-4);
+    margin-bottom: 10px;
+  }
+  .zonas-copy {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--muted-3);
+  }
+</style>

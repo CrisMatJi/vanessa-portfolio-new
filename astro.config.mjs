@@ -6,4 +6,11 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://www.suarezstudio.es',
   integrations: [sitemap()],
+  i18n: {
+    defaultLocale: 'es',
+    locales: ['es', 'en'],
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
 });

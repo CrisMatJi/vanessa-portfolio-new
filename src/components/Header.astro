@@ -2,15 +2,19 @@
 import { Image } from 'astro:assets';
 import iconWhite from '../assets/images/icon-white.png';
 import iconBlack from '../assets/images/icon-black.png';
+import { useTranslations, localizePath } from '../i18n/utils';
+import LangSwitcher from './LangSwitcher.astro';
 
 interface Props {
   darkHero?: boolean;
 }
 const { darkHero = false } = Astro.props;
+const lang = Astro.currentLocale ?? 'es';
+const t = useTranslations(lang);
 ---
 
 <header data-site-header data-dark-hero={darkHero} class:list={['header', { 'is-solid': !darkHero }]}>
-  <a href="/#top" aria-label="Suárez Studio — inicio" class="logo">
+  <a href={localizePath('/#top', lang)} aria-label="Suárez Studio — inicio" class="logo">
     <Image
       src={iconWhite}
       alt="Suárez Studio, interiorismo arquitectónico en Cádiz"
@@ -27,11 +31,12 @@ const { darkHero = false } = Astro.props;
     />
   </a>
   <nav class="nav">
-    <a href="/#servicios">Servicios</a>
-    <a href="/#proyectos">Proyectos</a>
-    <a href="/#proceso">Proceso</a>
-    <a href="/#estudio">Estudio</a>
-    <a href="/#contacto" class="nav-cta">Contacto</a>
+    <a href={localizePath('/#servicios', lang)}>{t.nav.services}</a>
+    <a href={localizePath('/#proyectos', lang)}>{t.nav.projects}</a>
+    <a href={localizePath('/#proceso', lang)}>{t.nav.process}</a>
+    <a href={localizePath('/#estudio', lang)}>{t.nav.studio}</a>
+    <a href={localizePath('/#contacto', lang)} class="nav-cta">{t.nav.contact}</a>
+    <LangSwitcher />
   </nav>
 </header>
 

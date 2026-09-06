@@ -1,35 +1,38 @@
 ---
 import { Image } from 'astro:assets';
 import icon from '../assets/images/icon-black.png';
+import { useTranslations, localizePath } from '../i18n/utils';
 
 const year = new Date().getFullYear();
+const lang = Astro.currentLocale ?? 'es';
+const t = useTranslations(lang);
 ---
 
 <footer class="footer">
   <div class="grid">
     <div class="brand">
       <Image src={icon} alt="Suárez Studio" width={573} height={952} class="brand-logo" />
-      <p>Interiorismo arquitectónico en Cádiz. Proyecto, renders, planimetría y seguimiento de obra.</p>
+      <p>{t.footer.brand}</p>
     </div>
     <div class="col">
-      <p class="col-title">Navegación</p>
-      <a href="/#servicios">Servicios</a>
-      <a href="/#proyectos">Proyectos</a>
-      <a href="/#proceso">Cómo trabajo</a>
-      <a href="/#estudio">Sobre mí</a>
-      <a href="/#contacto">Contacto</a>
+      <p class="col-title">{t.footer.navTitle}</p>
+      <a href={localizePath('/#servicios', lang)}>{t.nav.services}</a>
+      <a href={localizePath('/#proyectos', lang)}>{t.nav.projects}</a>
+      <a href={localizePath('/#proceso', lang)}>{t.footer.navHow}</a>
+      <a href={localizePath('/#estudio', lang)}>{t.footer.navAbout}</a>
+      <a href={localizePath('/#contacto', lang)}>{t.nav.contact}</a>
     </div>
     <div class="col">
-      <p class="col-title">Servicios</p>
-      <a href="/#servicios">Proyecto integral de interiorismo</a>
-      <a href="/#servicios">Proyecto llave en mano</a>
-      <a href="/#servicios">Seguimiento de obra</a>
-      <a href="/#servicios">Renders 3D</a>
-      <a href="/#servicios">Planimetría</a>
-      <a href="/#servicios">Asesorías de interiorismo</a>
+      <p class="col-title">{t.footer.servicesTitle}</p>
+      <a href={localizePath('/#servicios', lang)}>{t.catalog.integral}</a>
+      <a href={localizePath('/#servicios', lang)}>{t.catalog.llaveEnMano}</a>
+      <a href={localizePath('/#servicios', lang)}>{t.catalog.seguimiento}</a>
+      <a href={localizePath('/#servicios', lang)}>{t.catalog.renders}</a>
+      <a href={localizePath('/#servicios', lang)}>{t.catalog.planimetria}</a>
+      <a href={localizePath('/#servicios', lang)}>{t.catalog.asesorias}</a>
     </div>
     <div class="col">
-      <p class="col-title">Contacto</p>
+      <p class="col-title">{t.footer.contactTitle}</p>
       <a href="mailto:vanessa.cal.sua@gmail.com">vanessa.cal.sua@gmail.com</a>
       <a href="tel:+34611444163">+34 611 44 41 63</a>
       <a href="https://www.instagram.com/vanessa_suarez_interiorismo/" target="_blank" rel="noopener">Instagram</a>
@@ -41,9 +44,9 @@ const year = new Date().getFullYear();
   <div class="bottom">
     <p>&copy; {year} Suárez Studio · Cádiz</p>
     <div class="legal">
-      <a href="/aviso-legal">Aviso legal</a>
-      <a href="/privacidad">Privacidad</a>
-      <a href="/cookies">Cookies</a>
+      <a href={localizePath('/aviso-legal', lang)}>{t.footer.legalAviso}</a>
+      <a href={localizePath('/privacidad', lang)}>{t.footer.legalPrivacidad}</a>
+      <a href={localizePath('/cookies', lang)}>{t.footer.legalCookies}</a>
     </div>
   </div>
 </footer>

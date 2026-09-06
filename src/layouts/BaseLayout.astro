@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import WhatsAppButton from '../components/WhatsAppButton.astro';
+import { useTranslations, getAlternatePath } from '../i18n/utils';
 
 interface Props {
   title: string;
@@ -16,10 +17,13 @@ interface Props {
 const { title, description, ogImage, jsonLd, noindex = false, darkHero = false } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const defaultOgImage = new URL('/og-image.jpg', Astro.site);
+const lang = Astro.currentLocale ?? 'es';
+const t = useTranslations(lang);
+const htmlLang = lang === 'es' ? 'es-ES' : 'en';
 ---
 
 <!doctype html>
-<html lang="es-ES">
+<html lang={htmlLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -29,11 +33,14 @@ const defaultOgImage = new URL('/og-image.jpg', Astro.site);
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href={canonicalURL} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="alternate" hreflang="es" href={new URL(lang === 'es' ? Astro.url.pathname : getAlternatePath(Astro.url.pathname, lang), Astro.site)} />
+    <link rel="alternate" hreflang="en" href={new URL(lang === 'en' ? Astro.url.pathname : getAlternatePath(Astro.url.pathname, lang), Astro.site)} />
+    <link rel="alternate" hreflang="x-default" href={new URL(lang === 'es' ? Astro.url.pathname : getAlternatePath(Astro.url.pathname, lang), Astro.site)} />
 
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="es_ES" />
+    <meta property="og:locale" content={t.jsonld.ogLocale} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:image" content={ogImage ?? defaultOgImage} />
     <meta name="twitter:card" content="summary_large_image" />

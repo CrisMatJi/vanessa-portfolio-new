@@ -1,23 +1,27 @@
 ---
 import { Image } from 'astro:assets';
 import type { Project } from '../data/projects';
+import { useTranslations, localizePath } from '../i18n/utils';
 
 interface Props {
   project: Project;
   index: number;
 }
 const { project, index } = Astro.props;
+const lang = Astro.currentLocale ?? 'es';
+const t = useTranslations(lang);
+const projectHref = localizePath(`/proyectos/${project.slug}/`, lang);
 ---
 
 <article data-reveal class="card" style={`transition-delay:${index * 0.08}s`}>
-  <a href={`/proyectos/${project.slug}/`} class="cover">
+  <a href={projectHref} class="cover">
     <Image src={project.cover} alt={project.coverAlt} width={800} height={600} />
   </a>
   <div class="body">
     <span class="category">{project.category}</span>
-    <h3><a href={`/proyectos/${project.slug}/`}>{project.title}</a></h3>
+    <h3><a href={projectHref}>{project.title}</a></h3>
     <p>{project.subtitle}</p>
-    <a href={`/proyectos/${project.slug}/`} class="link">Ver proyecto ↗</a>
+    <a href={projectHref} class="link">{t.projectCard.cta}</a>
   </div>
 </article>
 

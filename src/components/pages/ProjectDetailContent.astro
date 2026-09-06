@@ -1,0 +1,435 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import type { Project, ProjectImage } from '../../data/projects';
+import { useTranslations, localizePath } from '../../i18n/utils';
+import { getLocalizedProject } from '../../i18n/projects';
+
+interface Props {
+  project: Project;
+  nextProject: Project;
+}
+
+const { project, nextProject } = Astro.props;
+const lang = Astro.currentLocale ?? 'es';
+const t = useTranslations(lang);
+const localizedProject = getLocalizedProject(project, lang);
+const localizedNextProject = getLocalizedProject(nextProject, lang);
+
+const title =
+  lang === 'en'
+    ? `${localizedProject.title} — ${localizedProject.category} in ${localizedProject.subtitle} | Suárez Studio`
+    : `${localizedProject.title} — ${localizedProject.category} en ${localizedProject.subtitle} | Suárez Studio`;
+const description = localizedProject.description.slice(0, 155).trim() + '…';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: `${localizedProject.title} — ${localizedProject.category}`,
+  description: localizedProject.description,
+  creator: { '@type': 'Person', name: 'Vanessa Suárez' },
+  about: localizedProject.subtitle,
+};
+
+// Images with a caption run as alternating image/text rows (left/right,
+// right/left...); everything after that runs in pairs, with a lone last
+// image (if the count is odd) shown on its own.
+const captionedCount = localizedProject.images.filter((img) => img.caption).length;
+const captioned = localizedProject.images.slice(0, captionedCount);
+const rest = localizedProject.images.slice(captionedCount);
+
+const pairs: ProjectImage[][] = [];
+let lone: ProjectImage | null = null;
+for (let i = 0; i < rest.length; i += 2) {
+  if (i + 1 < rest.length) pairs.push([rest[i], rest[i + 1]]);
+  else lone = rest[i];
+}
+
+const nextProjectHref = localizePath(`/proyectos/${nextProject.slug}/`, lang);
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <article class="project">
+    <div class="back-link-wrap">
+      <a href={localizePath('/#proyectos', lang)} class="back-link">
+        <span class="back-link-icon" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </span>
+        {t.projectDetail.back}
+      </a>
+    </div>
+    <header class="project-header">
+      <div class="header-grid">
+        <div class="header-left">
+          <p class="eyebrow">{localizedProject.category}</p>
+          <h1>{localizedProject.title}</h1>
+          <p class="subtitle">{localizedProject.subtitle}</p>
+        </div>
+        <div class="header-right">
+          <p class="intro-text">{localizedProject.description}</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="project-content">
+      <div class="divider" />
+
+      {
+        captioned.map((img, i) => (
+          <div class:list={['content-row', { rev: i % 2 === 1 }]}>
+            <div class="row-img">
+              <Image src={img.src} alt={img.alt} width={1200} height={800} loading={i === 0 ? 'eager' : 'lazy'} />
+            </div>
+            <div class="row-text">
+              <p>{img.caption}</p>
+            </div>
+          </div>
+        ))
+      }
+
+      {
+        pairs.map((pair) => (
+          <div class="pair">
+            {pair.map((img) => (
+              <div class="pair-img">
+                <Image src={img.src} alt={img.alt} width={900} height={675} loading="lazy" />
+              </div>
+            ))}
+          </div>
+        ))
+      }
+
+      {
+        lone && (
+          <div class="lone">
+            <Image src={lone.src} alt={lone.alt} width={1200} height={675} loading="lazy" />
+          </div>
+        )
+      }
+    </div>
+
+    <div class="end-screen">
+      <div class="end-card">
+        <a href={localizePath('/#contacto', lang)} class="end-cta">
+          <p>{t.projectDetail.ctaText}</p>
+          <span class="btn-solid">{t.projectDetail.ctaButton}</span>
+        </a>
+
+        <a href={nextProjectHref} class="end-next">
+          <Image src={localizedNextProject.cover} alt={localizedNextProject.coverAlt} width={900} height={720} loading="lazy" />
+          <div class="end-next-scrim" />
+          <div class="end-next-content">
+            <div class="end-next-copy">
+              <span class="end-next-label">{t.projectDetail.nextLabel}</span>
+              <span class="end-next-title">{localizedNextProject.title}</span>
+              <span class="end-next-subtitle">{localizedNextProject.subtitle}</span>
+            </div>
+            <span class="end-next-arrow" aria-hidden="true">→</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .back-link-wrap {
+    padding: clamp(120px, 18vh, 180px) clamp(20px, 4vw, 56px) 0;
+  }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 20px 6px 6px;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    background: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
+  }
+  .back-link:hover {
+    border-color: var(--ink);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transform: translateX(-2px);
+  }
+  .back-link-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .project-header {
+    padding: clamp(20px, 3vh, 32px) clamp(20px, 4vw, 56px) clamp(32px, 5vh, 48px);
+  }
+  .header-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(28px, 5vw, 64px);
+  }
+  .header-left .eyebrow {
+    margin-bottom: 18px;
+  }
+  .header-left h1 {
+    font-size: clamp(2.8rem, 7vw, 6.5rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .subtitle {
+    font-size: clamp(16px, 1.4vw, 20px);
+    color: var(--muted-3);
+    max-width: 40ch;
+  }
+  .header-right {
+    display: flex;
+    align-items: flex-end;
+  }
+  .intro-text {
+    font-size: clamp(16px, 1.2vw, 18px);
+    line-height: 1.7;
+    color: var(--body-copy);
+    max-width: 56ch;
+  }
+
+  .project-content {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 56px) clamp(70px, 10vh, 120px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(56px, 8vh, 96px);
+  }
+  .divider {
+    border-top: 1px solid var(--line);
+  }
+
+  /* Alternating image/text rows */
+  .content-row {
+    display: flex;
+    align-items: center;
+    gap: clamp(28px, 5vw, 64px);
+  }
+  .content-row.rev {
+    flex-direction: row-reverse;
+  }
+  .row-img,
+  .row-text {
+    flex: 1;
+    min-width: 0;
+  }
+  .row-img {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+  .row-img :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1s var(--ease);
+  }
+  .row-img:hover :global(img) {
+    transform: scale(1.035);
+  }
+  .row-text p {
+    font-size: clamp(16px, 1.3vw, 18px);
+    line-height: 1.7;
+    color: var(--body-copy);
+  }
+
+  /* Pairs of uncaptioned images, side by side */
+  .pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(16px, 2.5vw, 32px);
+  }
+  .pair-img {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+  .pair-img :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s var(--ease);
+  }
+  .pair-img:hover :global(img) {
+    transform: scale(1.04);
+  }
+
+  .lone {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+  .lone :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 720px) {
+    .header-grid {
+      grid-template-columns: 1fr;
+    }
+    .header-right {
+      align-items: flex-start;
+    }
+    .content-row,
+    .content-row.rev {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .pair {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .btn-solid {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--ink);
+    color: #fff;
+    padding: 15px 26px;
+    border-radius: 100px;
+    font-size: 15px;
+    font-weight: 700;
+    transition: opacity 0.3s ease;
+  }
+
+  /* End screen: CTA + next-project teaser, side by side in one card */
+  .end-screen {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: clamp(56px, 8vh, 96px) clamp(20px, 4vw, 56px) clamp(80px, 12vh, 140px);
+    border-top: 1px solid var(--line);
+  }
+  .end-card {
+    display: flex;
+    align-items: stretch;
+    min-height: clamp(300px, 40vh, 360px);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    overflow: hidden;
+  }
+
+  .end-cta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 22px;
+    padding: clamp(32px, 5vw, 56px);
+    background: #fafafa;
+    transition: background 0.25s ease;
+  }
+  .end-cta:hover {
+    background: var(--panel);
+  }
+  .end-cta p {
+    font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    max-width: 22ch;
+  }
+  .end-cta:hover .btn-solid {
+    opacity: 0.82;
+  }
+
+  .end-next {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+  }
+  .end-next :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s var(--ease);
+  }
+  .end-next:hover :global(img) {
+    transform: scale(1.06);
+  }
+  .end-next-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, 0.72) 100%);
+  }
+  .end-next-content {
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    padding: clamp(28px, 4vw, 40px);
+  }
+  .end-next-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .end-next-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .end-next-title {
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .end-next-subtitle {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 28ch;
+  }
+  .end-next-arrow {
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: transform 0.3s var(--ease);
+  }
+  .end-next:hover .end-next-arrow {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 720px) {
+    .end-card {
+      flex-direction: column;
+      min-height: 0;
+    }
+    .end-next {
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>
